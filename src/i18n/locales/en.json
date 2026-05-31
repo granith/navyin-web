@@ -1,0 +1,27 @@
+{
+  "app": {
+    "title": "Navyin"
+  },
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "whyNavy": "Why Navy",
+    "about": "About"
+  },
+  "footer": {
+    "copyright": "® Copyright {{year}} | NavyInnovations.com",
+    "dock": {
+      "ariaLabel": "Dock",
+      "consultants": "Consultants",
+      "teams": "Dedicated Teams",
+      "delivery": "Project Delivery",
+      "home": "Home"
+    },
+    "social": {
+      "ariaLabel": "Social media",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "dribbble": "Dribbble"
+    }
+  }
+}
