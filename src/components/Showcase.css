@@ -51,13 +51,14 @@
 }
 
 .showcase__item:hover,
-.showcase__item:focus-within {
+.showcase__item:has(.showcase__card:focus-visible) {
   z-index: 3;
   transition-delay: 0s;
 }
 
 .showcase__list:has(.showcase__item:hover) .showcase__item:not(:hover),
-.showcase__list:has(.showcase__item:focus-within) .showcase__item:not(:focus-within) {
+.showcase__list:has(.showcase__card:focus-visible)
+  .showcase__item:not(:has(.showcase__card:focus-visible)) {
   z-index: 1;
   transition-delay: 0s;
 }

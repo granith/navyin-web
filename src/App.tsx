@@ -5,6 +5,7 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Logos } from './components/Logos';
 import { Showcase } from './components/Showcase';
+import { Services } from './components/Services';
 import { Footer } from './components/Footer';
 import { ScrollHint } from './components/ScrollHint';
 
@@ -24,6 +25,7 @@ export default function App() {
         <Hero />
         <Logos />
         <Showcase />
+        <Services />
       </main>
 
       <Footer />

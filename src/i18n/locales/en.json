@@ -39,6 +39,61 @@
       "alt": "Close-up of liquid-cooled server hardware"
     }
   },
+  "services": {
+    "ariaLabel": "Services",
+    "howItWorksHeading": "How it works?",
+    "consultants": {
+      "title": "Consultants",
+      "desc": "Strengthen your team with senior specialists when you need speed and flexibility.",
+      "alt": "Consultants collaborating at a desk by a city-view window",
+      "howDesc": "Bring in senior expertise exactly where you need it. From UI/UX and frontend to backend, mobile, DevOps, QA, and product roles, our consultants integrate into your team and start contributing from day one.",
+      "steps": {
+        "one": {
+          "title": "Embedded into your team within days"
+        },
+        "two": {
+          "title": "Senior-only profiles"
+        },
+        "three": {
+          "title": "Flexible engagement based on your needs"
+        }
+      }
+    },
+    "teams": {
+      "title": "Dedicated teams",
+      "desc": "Build a focused team that works as a natural extension of your organization.",
+      "alt": "A dedicated team working together at their workstations",
+      "howDesc": "Build a complete team around your product or delivery needs. We assemble cross-functional teams covering design, engineering, QA, and product leadership.",
+      "steps": {
+        "one": {
+          "title": "Tailored team setup based on your goals"
+        },
+        "two": {
+          "title": "Fully integrated with your workflows"
+        },
+        "three": {
+          "title": "Scalable as your product grows"
+        }
+      }
+    },
+    "delivery": {
+      "title": "Project delivery",
+      "desc": "End-to-end delivery when you need a partner to take ownership.",
+      "alt": "Close-up of liquid-cooled server hardware",
+      "howDesc": "When you need full ownership, we handle the delivery end-to-end. From planning to execution, we ensure structure, clarity, and results.",
+      "steps": {
+        "one": {
+          "title": "Clear scope and defined milestones"
+        },
+        "two": {
+          "title": "Dedicated team with full accountability"
+        },
+        "three": {
+          "title": "Continuous updates and transparent progress"
+        }
+      }
+    }
+  },
   "nav": {
     "home": "Home",
     "services": "Services",
