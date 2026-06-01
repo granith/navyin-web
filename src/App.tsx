@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Logos } from './components/Logos';
+import { Showcase } from './components/Showcase';
 import { Footer } from './components/Footer';
 import { ScrollHint } from './components/ScrollHint';
 
@@ -22,6 +23,7 @@ export default function App() {
       <main className="app__main">
         <Hero />
         <Logos />
+        <Showcase />
       </main>
 
       <Footer />

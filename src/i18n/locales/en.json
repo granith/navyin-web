@@ -24,6 +24,21 @@
     "ariaLabel": "Companies we work with",
     "alt": "Client logo {{index}}"
   },
+  "showcase": {
+    "ariaLabel": "What we do",
+    "consultants": {
+      "label": "Consultants",
+      "alt": "Consultants collaborating at a desk by a city-view window"
+    },
+    "teams": {
+      "label": "Dedicated teams",
+      "alt": "A dedicated team working together at their workstations"
+    },
+    "delivery": {
+      "label": "Project Delivery",
+      "alt": "Close-up of liquid-cooled server hardware"
+    }
+  },
   "nav": {
     "home": "Home",
     "services": "Services",
