@@ -45,7 +45,6 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 2rem 1.5rem 6rem;
 }
 
 @media (prefers-reduced-motion: reduce) {

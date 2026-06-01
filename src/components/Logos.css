@@ -1,0 +1,62 @@
+.logos {
+  width: 100%;
+  padding: 80px 0;
+}
+
+.logos__list {
+  list-style: none;
+
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  column-gap: 80px;
+  row-gap: 40px;
+
+  width: 100%;
+  max-width: 980px;
+  margin-inline: auto;
+  padding-inline: 24px;
+
+  /* Fade the strip out toward both edges (mask alpha = visibility). */
+  --logos-fade: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0) 0%,
+    #000000 12.5%,
+    #000000 87.5%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  -webkit-mask-image: var(--logos-fade);
+  mask-image: var(--logos-fade);
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 48px;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 32px;
+  }
+}
+
+.logos__item {
+  display: grid;
+  place-items: center;
+}
+
+.logos__img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  min-height: 15px;
+  max-height: 36px;
+  object-fit: contain;
+
+  opacity: 0.65;
+  transition: opacity 0.2s var(--ease);
+
+  &:hover {
+    opacity: 1;
+  }
+}

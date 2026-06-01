@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { Logos } from './components/Logos';
 import { Footer } from './components/Footer';
 import { ScrollHint } from './components/ScrollHint';
 
@@ -20,6 +21,7 @@ export default function App() {
 
       <main className="app__main">
         <Hero />
+        <Logos />
       </main>
 
       <Footer />
