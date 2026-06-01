@@ -25,13 +25,15 @@ export type SoundDef =
   | { kind: 'synth'; spec: SynthSpec }
   | { kind: 'file'; src: string };
 
-export type SoundName = 'hover' | 'click' | 'toggle';
+export type SoundName = 'hover' | 'click' | 'toggle' | 'cell';
 
 export const sounds: Record<SoundName, SoundDef> = {
   hover: {
     kind: 'synth',
     spec: { type: 'sine', frequency: 880, duration: 0.06, gain: 0.05 }
   },
+  // Hero grid cell hover SFX (light-switch click).
+  cell: { kind: 'file', src: '/sounds/light-switch.mp3' },
   click: {
     kind: 'synth',
     spec: {

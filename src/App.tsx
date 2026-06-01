@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'motion/react';
 
 import { Navbar } from './components/Navbar';
+import { Hero } from './components/Hero';
 import { Footer } from './components/Footer';
+import { ScrollHint } from './components/ScrollHint';
 
 export default function App() {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
 
   // Keep <html lang> in sync with the active locale.
   useEffect(() => {
@@ -18,18 +19,12 @@ export default function App() {
       <Navbar />
 
       <main className="app__main">
-        {/* Minimal Motion example — replace with your own sections. */}
-        <motion.h1
-          className="app__title"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {t('app.title')}
-        </motion.h1>
+        <Hero />
       </main>
 
       <Footer />
+
+      <ScrollHint />
     </div>
   );
 }

@@ -1,0 +1,111 @@
+.hero {
+  width: 100%;
+}
+
+.hero__container {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 804px;
+  gap: 96px;
+  align-items: center;
+
+  width: 100%;
+  max-width: 1300px;
+  margin-inline: auto;
+  padding-inline: 24px;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+.hero__content {
+  text-align: left;
+}
+
+.hero__subtitle {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+
+.hero__title {
+  font-size: 28px;
+  font-weight: 590;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.hero__text {
+  max-width: 40ch;
+  font-size: 16px;
+  line-height: 1.25;
+  color: var(--text-dim);
+}
+
+.hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text-dim);
+  font-size: 16px;
+  transition: color 0.2s var(--ease);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--text);
+  }
+}
+
+.hero__cta-icon {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: #000;
+  background: var(--text-dim);
+  transition: background-color 0.2s var(--ease);
+
+  .hero__cta:hover &,
+  .hero__cta:focus-visible & {
+    background-color: var(--text);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.hero__grid {
+  display: grid;
+  grid-template-columns: 200px 150px 150px 150px 150px;
+  grid-template-rows: 100px 148px 352px;
+  grid-template-areas:
+    'engine engine global api ai'
+    'toggle phone phone web web'
+    'watch phone phone web web';
+
+  gap: 1px;
+  background: linear-gradient(180deg, #080808 0%, rgba(8, 8, 8, 0) 100%);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: none;
+    grid-template-areas: none;
+    grid-auto-rows: minmax(140px, auto);
+  }
+}

@@ -1,0 +1,17 @@
+.scroll-hint {
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + 60px + 24px);
+  z-index: 50;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 36px;
+
+  opacity: 0.55;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease);
+}
+
+.scroll-hint.is-hidden {
+  opacity: 0;
+}

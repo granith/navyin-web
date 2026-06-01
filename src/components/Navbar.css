@@ -1,6 +1,3 @@
-/* ----------------------------------------------------------------------------
-   Navbar — macOS-style top menu bar (~34px tall, SF Pro / system font)
----------------------------------------------------------------------------- */
 .navbar {
   position: sticky;
   top: 0;
@@ -15,9 +12,7 @@
 
   background: var(--bg);
   backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
 
-  /* SF Pro only here, to match the native Mac menu bar. */
   font-family: var(--font-system);
   color: #fff;
   user-select: none;
@@ -31,28 +26,26 @@
 }
 
 .navbar__left {
-  gap: 20px; /* logo ↔ nav */
+  gap: 20px;
 }
 
 .navbar__right {
   gap: 12px;
 }
 
-/* Logo slot — drop your own logo into .navbar__brand (inline <svg> or <img>). */
 .navbar__brand {
   display: inline-flex;
   align-items: center;
-  color: #fff; /* inline SVGs using fill="currentColor" pick this up */
+  color: #fff;
+
+  & svg,
+  & img {
+    display: block;
+    height: 24px;
+    width: auto;
+  }
 }
 
-.navbar__brand svg,
-.navbar__brand img {
-  display: block;
-  height: 24px;
-  width: auto;
-}
-
-/* Menu -------------------------------------------------------------------- */
 .navbar__menu {
   display: flex;
   align-items: center;
@@ -71,7 +64,6 @@
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 
-  /* Body / Emphasized — SF Pro 13 / 590. */
   font-family: inherit;
   font-size: 13px;
   font-weight: 590;
@@ -80,10 +72,10 @@
   text-shadow: 0 1px 6px rgba(204, 204, 204, 0.25);
   white-space: nowrap;
   transition: opacity 0.2s var(--ease);
-}
 
-.navbar__link:not(.is-active):hover {
-  opacity: 0.9;
+  &:not(.is-active):hover {
+    opacity: 0.9;
+  }
 }
 
 .navbar__label {
@@ -91,7 +83,6 @@
   z-index: 1;
 }
 
-/* Floating active pill ---------------------------------------------------- */
 .navbar__pill {
   position: absolute;
   inset: 0;
@@ -100,11 +91,9 @@
   background: rgba(255, 255, 255, 0.1);
   background-blend-mode: plus-lighter;
   backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
   box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.08);
 }
 
-/* Right-side status cluster ---------------------------------------------- */
 .navbar__status {
   display: inline-flex;
   align-items: center;
@@ -118,15 +107,12 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Hover affordance on the interactive flag only — sound icon & static flag stay flat. */
 .navbar__flag:not(.navbar__flag--static):hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* The glyph swaps between 19px (on) and 14px (muted). Reserve the wider width
-   and left-align so the speaker body stays put — only the waves come and go. */
 .navbar__sound {
-  width: 25px; /* 19px widest glyph + 2 × 3px padding */
+  width: 25px;
   justify-content: flex-start;
 }
 
@@ -137,7 +123,6 @@
   border-radius: 50%;
 }
 
-/* US/GB flag is informational only — not a button. */
 .navbar__flag--static {
   cursor: default;
 }

@@ -79,11 +79,17 @@ export class SoundEngine {
     if (!this.ctx) return null;
     const cached = this.buffers.get(src);
     if (cached) return cached;
-    const res = await fetch(src);
-    const arr = await res.arrayBuffer();
-    const buffer = await this.ctx.decodeAudioData(arr);
-    this.buffers.set(src, buffer);
-    return buffer;
+    try {
+      const res = await fetch(src);
+      if (!res.ok) return null;
+      const arr = await res.arrayBuffer();
+      const buffer = await this.ctx.decodeAudioData(arr);
+      this.buffers.set(src, buffer);
+      return buffer;
+    } catch {
+      // Missing or undecodable asset — fail silent until it's added.
+      return null;
+    }
   }
 
   private async playBuffer(src: string): Promise<void> {

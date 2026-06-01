@@ -2,6 +2,24 @@
   "app": {
     "title": "Navyin"
   },
+  "hero": {
+    "subtitle": "Deployed to Solve",
+    "title": "No Fluff. Just Delivery.",
+    "text": "We integrate senior consultants, teams, and execution to help you build faster, reduce waste, and see real return on your investment.",
+    "ctaPrimary": "Explore services",
+    "ctaSecondary": "Book a consultation",
+    "grid": {
+      "ariaLabel": "Capabilities",
+      "engine": "Engine",
+      "toggle": "Systems",
+      "global": "Designed Globally",
+      "api": "Navy API",
+      "ai": "Embedded\nArtificial Intelligence",
+      "watch": "Watch\nApplications",
+      "phone": "iOS/Android\nApplications",
+      "web": "Web-based\nApplications"
+    }
+  },
   "nav": {
     "home": "Home",
     "services": "Services",
@@ -23,5 +41,8 @@
       "instagram": "Instagram",
       "dribbble": "Dribbble"
     }
+  },
+  "scrollHint": {
+    "label": "Scroll down"
   }
 }

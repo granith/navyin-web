@@ -1,12 +1,9 @@
 :root {
   --bg: #000000;
-  --surface: rgba(255, 255, 255, 0.04);
-  --surface-strong: rgba(255, 255, 255, 0.08);
   --border: rgba(255, 255, 255, 0.1);
   --text: #ffffff;
   --text-dim: #808080;
 
-  /* Brand / accent colors (icon tints, etc.) */
   --blue: #0071e3;
   --green: #00ce93;
   --orange: #ff5702;

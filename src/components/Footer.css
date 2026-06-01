@@ -1,24 +1,36 @@
-/* ----------------------------------------------------------------------------
-   Footer — copyright (left), macOS-style Dock (center), socials (right)
----------------------------------------------------------------------------- */
 .footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+
   display: grid;
-  grid-template-columns: 1fr auto 1fr; /* center cell keeps the Dock centered */
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 16px;
   width: 100%;
   padding: 16px 24px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 18px;
+    padding: 24px 16px;
+    text-align: center;
+  }
 }
 
-/* Copyright --------------------------------------------------------------- */
 .footer__copyright {
   justify-self: start;
   color: var(--text-dim);
   font-size: 14px;
   white-space: nowrap;
+
+  @media (max-width: 640px) {
+    order: 3;
+    justify-self: center;
+  }
 }
 
-/* Dock -------------------------------------------------------------------- */
 .footer__dock {
   justify-self: center;
   display: flex;
@@ -31,11 +43,13 @@
   border: 1px solid #313131;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
   border-radius: 15px;
+
+  @media (max-width: 640px) {
+    order: 1;
+  }
 }
 
-/* Vertical divider before the Home icon (macOS Dock style). */
 .footer__dock-sep {
   flex: none;
   width: 1px;
@@ -51,9 +65,6 @@
   height: 36px;
 }
 
-/* Hover tooltip — same frosted treatment as the dock, floating above it.
-   Horizontally centered on the icon; bottom sits 8px above the dock
-   (20px = 12px dock top padding + 8px gap). */
 .footer__dock-tooltip {
   position: absolute;
   left: 50%;
@@ -68,7 +79,6 @@
   border: 1px solid #313131;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
   border-radius: 8px;
 
   font-family: var(--font-system);
@@ -82,52 +92,61 @@
   transition:
     opacity 0.2s var(--ease),
     transform 0.2s var(--ease);
-}
 
-.footer__dock-item:hover .footer__dock-tooltip,
-.footer__dock-item:focus-visible .footer__dock-tooltip {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  .footer__dock-item:hover &,
+  .footer__dock-item:focus-visible & {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 .footer__dock-icon {
   display: block;
   width: 36px;
   height: 36px;
-  transition: transform 0.2s var(--ease);
-}
+  transition:
+    transform 0.2s var(--ease),
+    opacity 0.2s var(--ease);
 
-/* Hover: icon lifts and the running-indicator dot fades in beneath it. */
-.footer__dock-item:hover .footer__dock-icon,
-.footer__dock-item:focus-visible .footer__dock-icon {
-  transform: translateY(-8px);
+  .footer__dock-item:hover &,
+  .footer__dock-item:focus-visible & {
+    transform: translateY(-8px);
+  }
+
+  .footer__dock-item:active & {
+    opacity: 0.5;
+  }
 }
 
 .footer__dock-dot {
   position: absolute;
   left: 50%;
-  bottom: -7px;
+  bottom: -4px;
   width: 4px;
   height: 4px;
   margin-left: -2px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.7);
+  background: #ffffff;
   opacity: 0;
   transition: opacity 0.2s var(--ease);
+
+  .footer__dock-item:hover &,
+  .footer__dock-item:focus-visible & {
+    opacity: 1;
+  }
 }
 
-.footer__dock-item:hover .footer__dock-dot,
-.footer__dock-item:focus-visible .footer__dock-dot {
-  opacity: 1;
-}
-
-/* Socials ----------------------------------------------------------------- */
 .footer__socials {
   justify-self: end;
   display: flex;
   align-items: center;
   gap: 8px;
   list-style: none;
+
+  @media (max-width: 640px) {
+    order: 2;
+    justify-self: center;
+  }
 }
 
 .footer__social {
@@ -137,7 +156,6 @@
   height: 24px;
 }
 
-/* Plain + colored icons stack; hover cross-fades to the colored version. */
 .footer__social-icon {
   position: absolute;
   inset: 0;
@@ -147,41 +165,18 @@
   transition: opacity 0.2s var(--ease);
 }
 
+.footer__social-icon--plain {
+  .footer__social:hover &,
+  .footer__social:focus-visible & {
+    opacity: 0;
+  }
+}
+
 .footer__social-icon--color {
   opacity: 0;
-}
 
-.footer__social:hover .footer__social-icon--plain,
-.footer__social:focus-visible .footer__social-icon--plain {
-  opacity: 0;
-}
-
-.footer__social:hover .footer__social-icon--color,
-.footer__social:focus-visible .footer__social-icon--color {
-  opacity: 1;
-}
-
-/* Responsive: stack centered on narrow screens (Dock → socials → copyright). */
-@media (max-width: 640px) {
-  .footer {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    gap: 18px;
-    padding: 24px 16px;
-    text-align: center;
-  }
-
-  .footer__dock {
-    order: 1;
-  }
-
-  .footer__socials {
-    order: 2;
-    justify-self: center;
-  }
-
-  .footer__copyright {
-    order: 3;
-    justify-self: center;
+  .footer__social:hover &,
+  .footer__social:focus-visible & {
+    opacity: 1;
   }
 }
