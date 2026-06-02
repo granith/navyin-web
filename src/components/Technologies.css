@@ -1,0 +1,121 @@
+.technologies {
+  width: 100%;
+  padding: 80px 0;
+}
+
+.technologies__inner {
+  width: 100%;
+  max-width: 600px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.technologies__title {
+  font-size: 32px;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 40px;
+}
+
+/*
+ * Pointy-top hexagons in a honeycomb. Each row is a flex strip with a 2px
+ * gutter; every row after the first nests into the one above by shifting half
+ * a cell to the right (--row-shift-x) and up into the notches (--row-shift-y).
+ * The shifts are derived so the diagonal gaps match the 2px straight gaps:
+ * pitch is 46px (44 cell + 2 gap), so the half-step is 23px, and -18.5px lifts
+ * the row until its angled edges sit 2px from the row above.
+ */
+.technologies__grid {
+  --row-shift-x: 23px;
+  --row-shift-y: -8px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: fit-content;
+  margin-inline: auto;
+}
+
+.technologies__row {
+  display: flex;
+  gap: 2px;
+}
+
+.technologies__row + .technologies__row {
+  margin-top: var(--row-shift-y);
+  margin-left: var(--row-shift-x);
+}
+
+.technologies__cell {
+  position: relative;
+  width: 44px;
+  height: 48px;
+
+  /* Pointer position relative to this cell; updated on grid mousemove. */
+  --mx: 50%;
+  --my: 50%;
+
+  transition: scale 0.25s var(--ease);
+}
+
+/* Lift the hovered hexagon above its neighbours and zoom it slightly. */
+.technologies__cell:hover {
+  scale: 1.05;
+  z-index: 1;
+}
+
+/* Hexagon fill (#1C1C1B) + 2px white border with rounded joins. */
+.technologies__hex {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.technologies__hex path {
+  fill: #1c1c1b;
+  stroke: var(--text);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+/*
+ * The spotlight: a soft white radial glow centred on the cursor, painted in
+ * each cell's local space and clipped to the hexagon so neighbouring cells
+ * stitch into one continuous beam. Sits above the fill but below the icon, and
+ * only reveals while the grid is hovered. clip-path mirrors the SVG path in
+ * Technologies.tsx.
+ */
+.technologies__spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  clip-path: path('M 18.90 2.62 Q 22.00 1.00 25.10 2.62 L 39.90 10.38 Q 43.00 12.00 43.00 15.50 L 43.00 32.50 Q 43.00 36.00 39.90 37.62 L 25.10 45.38 Q 22.00 47.00 18.90 45.38 L 4.10 37.62 Q 1.00 36.00 1.00 32.50 L 1.00 15.50 Q 1.00 12.00 4.10 10.38 Z');
+
+  background: radial-gradient(
+    90px circle at var(--mx) var(--my),
+    rgba(255, 255, 255, 0.35),
+    rgba(255, 255, 255, 0) 70%
+  );
+
+  opacity: 0;
+  transition: opacity 0.25s var(--ease);
+}
+
+.technologies__grid.is-active .technologies__spotlight {
+  opacity: 1;
+}
+
+.technologies__icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+
+  /* Fluid up to a 22×22 cap, preserving each icon's aspect ratio. */
+  width: auto;
+  height: auto;
+  max-width: 22px;
+  max-height: 22px;
+}

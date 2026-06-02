@@ -110,6 +110,31 @@
       "alt": "Microsoft Partner Network"
     }
   },
+  "technologies": {
+    "ariaLabel": "Technologies",
+    "title": "Technologies",
+    "apple": { "alt": "Apple" },
+    "android": { "alt": "Android" },
+    "flutter": { "alt": "Flutter" },
+    "docker": { "alt": "Docker" },
+    "vue": { "alt": "Vue.js" },
+    "playwright": { "alt": "Playwright" },
+    "python": { "alt": "Python" },
+    "aws": { "alt": "Amazon Web Services" },
+    "cypress": { "alt": "Cypress" },
+    "react": { "alt": "React" },
+    "nodejs": { "alt": "Node.js" },
+    "java": { "alt": "Java" },
+    "googleCloud": { "alt": "Google Cloud" },
+    "nextjs": { "alt": "Next.js" }
+  },
+  "benefits": {
+    "ariaLabel": "Why choose us?",
+    "title": "Why choose us?",
+    "senior": { "label": "Senior-only" },
+    "partnership": { "label": "Long-term partnership" },
+    "delivery": { "label": "Built for delivery" }
+  },
   "nav": {
     "home": "Home",
     "services": "Services",

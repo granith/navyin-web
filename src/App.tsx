@@ -7,6 +7,8 @@ import { Logos } from './components/Logos';
 import { Showcase } from './components/Showcase';
 import { Services } from './components/Services';
 import { Partnerships } from './components/Partnerships';
+import { Technologies } from './components/Technologies';
+import { Benefits } from './components/Benefits';
 import { Footer } from './components/Footer';
 import { ScrollHint } from './components/ScrollHint';
 
@@ -28,6 +30,8 @@ export default function App() {
         <Showcase />
         <Services />
         <Partnerships />
+        <Technologies />
+        <Benefits />
       </main>
 
       <Footer />
