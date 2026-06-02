@@ -23,6 +23,11 @@
   grid-template-columns: repeat(3, 140px);
   justify-content: center;
   gap: 60px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 140px;
+    gap: 64px;
+  }
 }
 
 /* Icon over label, dim at rest and fully lit on hover. */
@@ -36,6 +41,10 @@
   transition: opacity 0.2s var(--ease);
 
   &:hover {
+    opacity: 1;
+  }
+
+  @media (hover: none) {
     opacity: 1;
   }
 }

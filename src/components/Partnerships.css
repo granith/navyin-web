@@ -22,6 +22,11 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: min(180px, 100%);
+    justify-content: center;
+  }
 }
 
 .partnerships__card {
@@ -32,6 +37,10 @@
   transition: opacity 0.2s var(--ease);
 
   &:hover {
+    opacity: 1;
+  }
+
+  @media (hover: none) {
     opacity: 1;
   }
 }

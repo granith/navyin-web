@@ -67,7 +67,10 @@ export function SoundProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<SoundContextValue>(
     () => ({
-      play: (name) => engine.play(name),
+      play: (name) => {
+        if (window.matchMedia('(hover: none)').matches) return;
+        engine.play(name);
+      },
       enabled,
       setEnabled,
       toggle: () => setEnabled(!enabled)

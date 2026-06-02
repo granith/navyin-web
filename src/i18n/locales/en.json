@@ -128,6 +128,28 @@
     "googleCloud": { "alt": "Google Cloud" },
     "nextjs": { "alt": "Next.js" }
   },
+  "testimonials": {
+    "ariaLabel": "Client testimonials",
+    "title": "What our Clients say",
+    "healthcare": {
+      "title": "They didn't just agree with us.",
+      "text": "They challenged our thinking in the right moments and helped us see things we were missing. We left with real clarity and stronger decisions.",
+      "author": "Healthcare",
+      "flagAlt": "United States flag"
+    },
+    "fintech": {
+      "title": "They became part of the team almost immediately.",
+      "text": "Communication got easier, responsibilities were clearer, and the whole team started working better together.",
+      "author": "Fintech",
+      "flagAlt": "United Kingdom flag"
+    },
+    "ecommerce": {
+      "title": "They delivered exactly what we needed, on time, without stress.",
+      "text": "The level of detail and care showed in every part of the final result.",
+      "author": "E-commerce",
+      "flagAlt": "Sweden flag"
+    }
+  },
   "benefits": {
     "ariaLabel": "Why choose us?",
     "title": "Why choose us?",
