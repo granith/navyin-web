@@ -1,0 +1,82 @@
+.partnerships {
+  width: 100%;
+  padding: 80px 0;
+}
+
+.partnerships__inner {
+  width: 100%;
+  max-width: 600px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.partnerships__title {
+  font-size: 32px;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 40px;
+}
+
+.partnerships__grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.partnerships__card {
+  display: flex;
+  flex-direction: column;
+
+  opacity: 0.5;
+  transition: opacity 0.2s var(--ease);
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+/*
+ * The image keeps its rounded top corners; the border lives on an overlay
+ * pseudo-element so it can fade toward the bottom (via mask) without dimming
+ * the image underneath. Mirrors the step-card border in Services, but here the
+ * fade applies to the border rather than the content.
+ */
+/*
+ * 4px gradient border: var(--border) at the top fading to transparent at the bottom
+ * (over the black page). A plain `border` can't take a gradient, so we paint a
+ * black padding-box fill (matching the page) over a border-box gradient — the
+ * gradient only shows in the 4px border ring. `overflow: hidden` clips the
+ * image to the inner (rounded) edge.
+ */
+.partnerships__media {
+  position: relative;
+  overflow: hidden;
+
+  border: 4px solid transparent;
+  border-bottom: 0;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+
+  background:
+    linear-gradient(#000000, #000000) padding-box,
+    linear-gradient(180deg, var(--border) 50%, transparent 100%) border-box;
+}
+
+.partnerships__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  padding: 1px;
+  padding-bottom: 0;
+}
+
+.partnerships__label {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.2;
+  color: var(--text);
+  text-align: center;
+}

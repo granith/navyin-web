@@ -6,6 +6,7 @@ import { Hero } from './components/Hero';
 import { Logos } from './components/Logos';
 import { Showcase } from './components/Showcase';
 import { Services } from './components/Services';
+import { Partnerships } from './components/Partnerships';
 import { Footer } from './components/Footer';
 import { ScrollHint } from './components/ScrollHint';
 
@@ -26,6 +27,7 @@ export default function App() {
         <Logos />
         <Showcase />
         <Services />
+        <Partnerships />
       </main>
 
       <Footer />

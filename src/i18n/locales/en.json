@@ -94,6 +94,22 @@
       }
     }
   },
+  "partnerships": {
+    "ariaLabel": "Partnerships",
+    "title": "Partnerships",
+    "aws": {
+      "label": "AWS Web-Services",
+      "alt": "Amazon Web Services"
+    },
+    "google": {
+      "label": "Google Cloud Partner",
+      "alt": "Google Cloud Partner"
+    },
+    "microsoft": {
+      "label": "Microsoft Partner Network",
+      "alt": "Microsoft Partner Network"
+    }
+  },
   "nav": {
     "home": "Home",
     "services": "Services",
