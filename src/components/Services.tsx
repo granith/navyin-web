@@ -17,7 +17,7 @@ type ServiceItem = {
   descKey: ParseKeys;
   altKey: ParseKeys;
   howDescKey: ParseKeys;
-  steps: readonly { titleKey: ParseKeys; textKey: ParseKeys }[];
+  steps: readonly { titleKey: ParseKeys }[];
 };
 
 const ITEMS: readonly ServiceItem[] = [
@@ -30,9 +30,9 @@ const ITEMS: readonly ServiceItem[] = [
     altKey: 'services.consultants.alt',
     howDescKey: 'services.consultants.howDesc',
     steps: [
-      { titleKey: 'services.consultants.steps.one.title', textKey: 'services.consultants.steps.one.text' },
-      { titleKey: 'services.consultants.steps.two.title', textKey: 'services.consultants.steps.two.text' },
-      { titleKey: 'services.consultants.steps.three.title', textKey: 'services.consultants.steps.three.text' },
+      { titleKey: 'services.consultants.steps.one.title' },
+      { titleKey: 'services.consultants.steps.two.title' },
+      { titleKey: 'services.consultants.steps.three.title' },
     ],
   },
   {
@@ -44,9 +44,9 @@ const ITEMS: readonly ServiceItem[] = [
     altKey: 'services.teams.alt',
     howDescKey: 'services.teams.howDesc',
     steps: [
-      { titleKey: 'services.teams.steps.one.title', textKey: 'services.teams.steps.one.text' },
-      { titleKey: 'services.teams.steps.two.title', textKey: 'services.teams.steps.two.text' },
-      { titleKey: 'services.teams.steps.three.title', textKey: 'services.teams.steps.three.text' },
+      { titleKey: 'services.teams.steps.one.title' },
+      { titleKey: 'services.teams.steps.two.title' },
+      { titleKey: 'services.teams.steps.three.title' },
     ],
   },
   {
@@ -58,9 +58,9 @@ const ITEMS: readonly ServiceItem[] = [
     altKey: 'services.delivery.alt',
     howDescKey: 'services.delivery.howDesc',
     steps: [
-      { titleKey: 'services.delivery.steps.one.title', textKey: 'services.delivery.steps.one.text' },
-      { titleKey: 'services.delivery.steps.two.title', textKey: 'services.delivery.steps.two.text' },
-      { titleKey: 'services.delivery.steps.three.title', textKey: 'services.delivery.steps.three.text' },
+      { titleKey: 'services.delivery.steps.one.title' },
+      { titleKey: 'services.delivery.steps.two.title' },
+      { titleKey: 'services.delivery.steps.three.title' },
     ],
   },
 ];
