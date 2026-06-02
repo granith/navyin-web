@@ -8,6 +8,7 @@
 
 .hero-cell__graphic {
   position: absolute;
+  z-index: 1;
 }
 
 .hero-cell__img {

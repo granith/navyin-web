@@ -190,29 +190,31 @@ export function Hero() {
           </div>
         </div>
 
-        <div
-          className="hero__grid"
-          role="group"
-          aria-label={t('hero.grid.ariaLabel')}
-        >
-          {CELLS.map((cell) => (
-            <HeroCell
-              key={cell.id}
-              gridArea={cell.gridArea}
-              graphic={
-                cell.graphic && {
-                  ...cell.graphic,
+        <div className="hero__grid-wrapper">
+          <div
+            className="hero__grid"
+            role="group"
+            aria-label={t('hero.grid.ariaLabel')}
+          >
+            {CELLS.map((cell) => (
+              <HeroCell
+                key={cell.id}
+                gridArea={cell.gridArea}
+                graphic={
+                  cell.graphic && {
+                    ...cell.graphic,
+                  }
                 }
-              }
-              label={
-                cell.label && {
-                  text: t(cell.label.key),
-                  variant: cell.label.variant,
+                label={
+                  cell.label && {
+                    text: t(cell.label.key),
+                    variant: cell.label.variant,
+                  }
                 }
-              }
-              onHover={playCell}
-            />
-          ))}
+                onHover={playCell}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
