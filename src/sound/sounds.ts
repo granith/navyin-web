@@ -30,8 +30,7 @@ export type SoundName =
   | 'click'
   | 'toggle'
   | 'cell'
-  | 'appear'
-  | 'equip';
+  | 'appear';
 
 export const sounds: Record<SoundName, SoundDef> = {
   hover: {
@@ -43,7 +42,6 @@ export const sounds: Record<SoundName, SoundDef> = {
   // Showcase card hover SFX (image expands into view).
   appear: { kind: 'file', src: '/sounds/appear.mp3' },
   // Partnership card hover SFX.
-  equip: { kind: 'file', src: '/sounds/equip.mp3' },
   click: {
     kind: 'synth',
     spec: {

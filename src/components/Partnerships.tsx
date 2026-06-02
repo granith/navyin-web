@@ -51,11 +51,11 @@ export function Partnerships() {
   const { play } = useSound();
 
   const lastHover = useRef(0);
-  const playEquip = useCallback(() => {
+  const playClick = useCallback(() => {
     const now = performance.now();
     if (now - lastHover.current < HOVER_THROTTLE_MS) return;
     lastHover.current = now;
-    play('equip');
+    play('click');
   }, [play]);
 
   return (
@@ -68,7 +68,7 @@ export function Partnerships() {
             <li
               key={partner.id}
               className="partnerships__card"
-              onMouseEnter={playEquip}
+              onMouseEnter={playClick}
             >
               <div className="partnerships__media">
                 <img

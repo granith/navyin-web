@@ -67,11 +67,11 @@ export function Technologies() {
   // The hover SFX fires once when the pointer enters the grid (not per icon),
   // throttled so a quick exit/re-enter sweep doesn't machine-gun it.
   const lastHover = useRef(0);
-  const playEquip = useCallback(() => {
+  const playClick = useCallback(() => {
     const now = performance.now();
     if (now - lastHover.current < HOVER_THROTTLE_MS) return;
     lastHover.current = now;
-    play('equip');
+    play('click');
   }, [play]);
 
   // Write each cell's pointer-relative coords so its spotlight gradient lines
@@ -101,7 +101,7 @@ export function Technologies() {
           onMouseMove={handleMove}
           onMouseEnter={() => {
             setActive(true);
-            playEquip();
+            playClick();
           }}
           onMouseLeave={() => setActive(false)}
         >

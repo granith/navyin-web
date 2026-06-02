@@ -10,8 +10,9 @@ import './Navbar.css';
 const MENU = [
   { id: 'home', labelKey: 'nav.home' },
   { id: 'services', labelKey: 'nav.services' },
-  { id: 'whyNavy', labelKey: 'nav.whyNavy' },
-  { id: 'about', labelKey: 'nav.about' }
+  { id: 'technologies', labelKey: 'nav.technologies' },
+  { id: 'whyUs', labelKey: 'nav.whyUs' },
+  { id: 'contact', labelKey: 'nav.contact' }
 ] as const;
 
 type MenuId = (typeof MENU)[number]['id'];
@@ -164,7 +165,7 @@ function LanguageFlag() {
   const label = `Switch to ${LANG_NAMES[target] ?? target.toUpperCase()}`;
   const handleClick = () => {
     toggle();
-    play('equip');
+    play('click');
   };
   return (
     <button

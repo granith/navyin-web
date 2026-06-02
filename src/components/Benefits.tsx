@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { ParseKeys } from 'i18next';
 
+import { useSound } from '../sound/SoundProvider';
 import './Benefits.css';
 
 /**
@@ -28,6 +29,7 @@ const ICON = '/benefits/icon.svg';
  */
 export function Benefits() {
   const { t } = useTranslation();
+  const { play } = useSound();
 
   return (
     <section className="benefits" aria-label={t('benefits.ariaLabel')}>
@@ -36,7 +38,7 @@ export function Benefits() {
 
         <ul className="benefits__grid">
           {BENEFITS.map((benefit) => (
-            <li key={benefit.id} className="benefits__card">
+            <li key={benefit.id} className="benefits__card" onMouseEnter={() => play('click')}>
               <img className="benefits__icon" src={ICON} alt="" aria-hidden="true" />
               <p className="benefits__label">{t(benefit.labelKey)}</p>
             </li>

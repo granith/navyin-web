@@ -39,8 +39,8 @@ const MARKER_BASE = 0.05;
  * `STEP_MIN` px so it stays substantial on short windows. Bigger = more scroll
  * per country (total section scroll = step × (countries − 1)).
  */
-const STEP_VH = 1.3;
-const STEP_MIN = 640;
+const STEP_VH = 0.5;
+const STEP_MIN = 500;
 /** Min gap between hover SFX so sweeping the list doesn't machine-gun it. */
 const HOVER_THROTTLE_MS = 120;
 
@@ -91,6 +91,8 @@ export function Locations() {
   // apply() ignores the countries scrolled past so the globe goes straight to
   // the target instead of easing through every one in between.
   const pendingRef = useRef<number | null>(null);
+  const playRef = useRef(play);
+  playRef.current = play;
 
   // ── Pin + scroll-driven active index ──────────────────────────────────────
   useLayoutEffect(() => {
@@ -132,6 +134,7 @@ export function Locations() {
 
       activeRef.current = next;
       setActive(next);
+      playRef.current('hover');
       const [lat, long] = LOCATIONS[next].coords;
       focusRef.current = locationToAngles(lat, long);
       track.style.transform = `translate3d(0, ${centersRef.current[next] ?? 0}px, 0)`;
@@ -234,7 +237,9 @@ export function Locations() {
     ro.observe(canvas);
 
     let raf = 0;
+    let destroyed = false;
     const tick = () => {
+      if (destroyed) return;
       const [focusPhi, focusTheta] = focusRef.current;
       if (motionQuery.matches) {
         phi = focusPhi;
@@ -253,10 +258,21 @@ export function Locations() {
     const reveal = requestAnimationFrame(() => setReady(true));
 
     return () => {
+      destroyed = true;
       cancelAnimationFrame(raf);
       cancelAnimationFrame(reveal);
       ro.disconnect();
       globe.destroy();
+      // cobe v2 destroy() deletes buffers but never disables vertex attributes.
+      // The enabled-attribute state is global per WebGL context — on React 18
+      // Strict Mode's remount, createGlobe gets the same context, finds
+      // attributes still enabled but pointing to deleted buffers, and the first
+      // drawArrays throws INVALID_OPERATION. Disable them all to reset the slate.
+      const gl = canvas.getContext('webgl2') ?? canvas.getContext('webgl');
+      if (gl) {
+        const count = gl.getParameter(gl.MAX_VERTEX_ATTRIBS) as number;
+        for (let i = 0; i < count; i++) gl.disableVertexAttribArray(i);
+      }
     };
   }, []);
 

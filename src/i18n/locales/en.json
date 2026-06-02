@@ -148,8 +148,9 @@
   "nav": {
     "home": "Home",
     "services": "Services",
-    "whyNavy": "Why Navy",
-    "about": "About"
+    "technologies": "Tech stack",
+    "whyUs": "Why us",
+    "contact": "Contact"
   },
   "footer": {
     "copyright": "® Copyright {{year}} | NavyInnovations.com",
