@@ -151,6 +151,7 @@ function SoundButton() {
  */
 function LanguageFlag() {
   const { flag, locked, isEnglish, nativeLang, toggle } = useCountry();
+  const { play } = useSound();
   const flagImg = (
     <img className="navbar__flag-img" src={flag} alt="" width={16} height={16} />
   );
@@ -161,11 +162,15 @@ function LanguageFlag() {
 
   const target = isEnglish ? nativeLang : 'en';
   const label = `Switch to ${LANG_NAMES[target] ?? target.toUpperCase()}`;
+  const handleClick = () => {
+    toggle();
+    play('equip');
+  };
   return (
     <button
       type="button"
       className="navbar__status navbar__flag"
-      onClick={toggle}
+      onClick={handleClick}
       aria-label={label}
       title={label}
     >
