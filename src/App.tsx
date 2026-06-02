@@ -9,6 +9,7 @@ import { Services } from './components/Services';
 import { Partnerships } from './components/Partnerships';
 import { Technologies } from './components/Technologies';
 import { Benefits } from './components/Benefits';
+import { Locations } from './components/Locations';
 import { Footer } from './components/Footer';
 import { ScrollHint } from './components/ScrollHint';
 
@@ -32,6 +33,7 @@ export default function App() {
         <Partnerships />
         <Technologies />
         <Benefits />
+        <Locations />
       </main>
 
       <Footer />

@@ -1,0 +1,213 @@
+.locations {
+  position: relative;
+  width: 100%;
+
+  @media (prefers-reduced-motion: reduce) {
+    height: auto !important;
+  }
+}
+
+.locations__sticky {
+  position: sticky;
+  top: var(--nav-offset, 34px);
+  height: max(
+    520px,
+    calc(100svh - var(--nav-offset, 34px) - var(--dock-offset, 92px))
+  );
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+
+  @media (prefers-reduced-motion: reduce) {
+    position: static;
+    height: auto;
+    overflow: visible;
+  }
+
+  @media (max-width: 768px) {
+    position: static;
+    height: auto;
+    overflow: visible;
+    padding: 64px 24px;
+  }
+}
+
+/* 3 columns — 22.5% / 50% / 27.5% via fr so the 64px gaps come out of the row. */
+.locations__inner {
+  display: grid;
+  grid-template-columns: 24fr 50fr 30fr;
+  gap: 32px;
+  align-items: center;
+  width: 100%;
+  max-width: 1340px;
+  text-align: left;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    justify-items: center;
+    text-align: center;
+  }
+}
+
+.locations__title {
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 100%;
+}
+
+/* Middle column: a square globe, capped so it never outgrows the pinned area. */
+.locations__globe {
+  position: relative;
+  width: 100%;
+  margin-inline: auto;
+  aspect-ratio: 1;
+  max-width: min(62svh, 560px);
+}
+
+/* Wraps the canvas, which cobe re-parents into its own div. */
+.locations__stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.locations__canvas {
+  width: 100%;
+  height: 100%;
+  contain: layout paint size;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease);
+}
+
+.locations__inner.is-ready .locations__canvas {
+  opacity: 1;
+}
+
+/* Pulse centred on the globe's focal point — i.e. behind whichever country the
+ * globe has eased to the front. A small dot emits an expanding box-shadow ring
+ * that fades out and repeats (the colour stays solid; only opacity fades, so
+ * there's no grey fringe). */
+.locations__ping {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  translate: -50% -50%;
+  pointer-events: none;
+  box-shadow: 0 0 0 0 var(--orange);
+  animation: locations-ping 2s var(--ease) infinite;
+}
+
+@keyframes locations-ping {
+  0% {
+    box-shadow: 0 0 0 0 var(--orange);
+    opacity: 0.6;
+  }
+  100% {
+    box-shadow: 0 0 0 18px var(--orange);
+    opacity: 0;
+  }
+}
+
+/* No pulse with reduced motion — leave a faint static ring as the marker. */
+@media (prefers-reduced-motion: reduce) {
+  .locations__ping {
+    animation: none;
+    box-shadow: 0 0 0 3px var(--orange);
+    opacity: 0.35;
+  }
+}
+
+/* Right column: the active item sits at the vertical centre; the track slides
+ * so it stays there. The list fades out top and bottom (the bottom shade the
+ * spec asks for, plus a matching top one so items don't hard-cut in). */
+.locations__list {
+  position: relative;
+  height: min(62svh, 560px);
+  overflow: hidden;
+
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    #000 24%,
+    #000 76%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    #000 24%,
+    #000 76%,
+    transparent 100%
+  );
+
+  @media (prefers-reduced-motion: reduce) {
+    height: auto;
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  @media (max-width: 768px) {
+    height: auto;
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+.locations__track {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  list-style: none;
+  will-change: transform;
+
+  /* The list only moves when the active country changes, easing to re-centre. */
+  transition: transform 0.7s var(--ease);
+
+  @media (prefers-reduced-motion: reduce) {
+    transform: none !important;
+  }
+
+  @media (max-width: 768px) {
+    transform: none !important;
+    align-items: center;
+  }
+}
+
+.locations__btn {
+  appearance: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  font-size: 32px;
+  line-height: 100%;
+  color: var(--text);
+
+  opacity: 0.5;
+  transition: opacity 0.3s var(--ease);
+
+  &:hover {
+    opacity: 0.75;
+  }
+
+  &.is-active {
+    opacity: 1;
+  }
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+}

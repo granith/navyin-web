@@ -610,6 +610,11 @@ caniuse-lite@^1.0.30001782, caniuse-lite@^1.0.30001787:
   resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001793.tgz"
   integrity sha512-iwSsYWaCOoh26cV8NwNRViHlrfUvYsHDfRVcbtmw0Kg6PJIZZXwMkj1442FYLBGkeUf1juAsU3DTfxW579mrPA==
 
+cobe@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/cobe/-/cobe-2.0.1.tgz#c6461d2ff2036b2d6fc3538c79985d1e0825b3aa"
+  integrity sha512-aaa6vcIlaC8C1SF50LDH0Anybo/EAXnrxqe+bwvr4+YUtZydqjeBjTTD7ziCCkbRrRGSns3I3F6cZsf3W+L+ag==
+
 css-blank-pseudo@^8.0.1:
   version "8.0.1"
   resolved "https://registry.npmjs.org/css-blank-pseudo/-/css-blank-pseudo-8.0.1.tgz"

@@ -135,6 +135,16 @@
     "partnership": { "label": "Long-term partnership" },
     "delivery": { "label": "Built for delivery" }
   },
+  "locations": {
+    "ariaLabel": "Our locations",
+    "title": "Globally Connected",
+    "sweden": "Sweden",
+    "denmark": "Denmark",
+    "unitedKingdom": "United Kingdom",
+    "canada": "Canada",
+    "unitedStates": "United States of America",
+    "kosovo": "Kosovo"
+  },
   "nav": {
     "home": "Home",
     "services": "Services",
