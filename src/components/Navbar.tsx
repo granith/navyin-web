@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'motion/react';
+import type { ParseKeys } from 'i18next';
 
 import { useCountry } from '../i18n/CountryProvider';
 import { useSound } from '../sound/SoundProvider';
@@ -26,6 +27,27 @@ const LANG_NAMES: Record<string, string> = {
   sq: 'Shqip'
 };
 
+const MOBILE_SOCIALS = [
+  {
+    id: 'facebook',
+    labelKey: 'footer.social.facebook' as ParseKeys,
+    href: '#',
+    icon: '/social/fb.svg'
+  },
+  {
+    id: 'instagram',
+    labelKey: 'footer.social.instagram' as ParseKeys,
+    href: '#',
+    icon: '/social/ig.svg'
+  },
+  {
+    id: 'dribbble',
+    labelKey: 'footer.social.dribbble' as ParseKeys,
+    href: '#',
+    icon: '/social/db.svg'
+  }
+] as const;
+
 /**
  * macOS-style top menu bar. The active menu item is highlighted by a floating
  * pill that slides between items using a shared layout animation.
@@ -33,67 +55,160 @@ const LANG_NAMES: Record<string, string> = {
 export function Navbar() {
   const { t } = useTranslation();
   const [active, setActive] = useState<MenuId>('home');
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
+  const toggleMenu = useCallback(() => setMenuOpen((o) => !o), []);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false);
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [menuOpen]);
 
   return (
-    <header className="navbar">
-      <div className="navbar__left">
-        <div className="navbar__brand" aria-label="Navy Innovations">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="154"
-            height="24"
-            fill="none"
-            viewBox="0 0 154 24"
-          >
-            <path
-              fill="#fff"
-              d="M32.71 6h1.838l3.357 5.184L41.173 6h1.714v.648l-4.081 6.39v5.31H36.88v-5.31l-4.17-6.39zM21.117 6h1.784l3.233 9.846L29.491 6h1.749v.648l-4.134 11.7H25.18l-4.063-11.7zM19.59 16.206h-5.212l-.725 2.142h-1.731V17.7L16.092 6h1.925l4.028 11.7v.648h-1.75zm-2.545-7.758-2.668 7.758h5.212zM0 6h2.12l5.865 8.892V6H9.84v12.348H8.091L1.855 9.006v9.342H0zM50.195 0H154v24H50.195z"
-            />
-            <path
-              fill="#000"
-              d="M57.6 5.652h.881V18h-1.98V6.858zm3.466 3.51h1.206l.397 1.044c.918-.918 1.89-1.386 3.186-1.386 2.231 0 3.221 1.314 3.221 3.582V18h-1.853v-5.526c0-1.296-.558-2.052-1.909-2.052-.971 0-1.691.378-2.393 1.08V18h-1.855zm10.354 0h1.206l.396 1.044c.918-.918 1.89-1.386 3.186-1.386 2.232 0 3.222 1.314 3.222 3.582V18h-1.854v-5.526c0-1.296-.558-2.052-1.908-2.052-.972 0-1.692.378-2.394 1.08V18H71.42zm11.992 3.528v1.782c0 1.458.737 2.286 2.105 2.286s2.124-.846 2.124-2.286v-1.8c0-1.494-.756-2.25-2.124-2.25-1.367 0-2.105.738-2.105 2.268m-1.837 1.764v-1.746c0-2.574 1.495-3.888 3.942-3.888 2.467 0 3.943 1.314 3.943 3.87v1.782c0 2.556-1.476 3.888-3.942 3.888-2.448 0-3.942-1.332-3.942-3.906m8.973-5.292h1.674l2.466 6.912 2.574-6.912H98.9v.522L95.66 18h-1.962l-3.15-8.316zm9.804 2.898v-.144c0-1.962 1.512-3.096 3.744-3.096 2.088 0 3.78 1.008 3.78 3.888V18h-1.188l-.306-.756c-.846.666-2.232 1.044-3.312 1.044-2.07 0-3.006-1.35-3.006-2.898 0-2.124 1.728-2.718 3.492-2.718 1.134 0 1.944.036 2.574.054v-.18c0-1.62-.864-2.178-2.088-2.178-1.17 0-1.998.54-1.998 1.584v.108zm3.132 4.734c.9 0 1.836-.324 2.646-.81V13.95a70 70 0 0 0-2.034-.036c-1.62 0-2.304.27-2.304 1.368 0 .99.54 1.512 1.692 1.512m6.028-6.678.882-.954h.342v-1.89l1.026-1.152h.828v3.042h2.34v1.566h-2.34v3.888c0 1.35.414 1.818 1.656 1.818h.72V18h-.756c-2.592 0-3.474-1.206-3.474-3.384v-3.888h-1.224zm8.127-.954h.828V18h-1.854v-7.686zm-1.026-3.852h1.854v2.268h-1.854zm5.875 7.38v1.782c0 1.458.738 2.286 2.106 2.286s2.124-.846 2.124-2.286v-1.8c0-1.494-.756-2.25-2.124-2.25s-2.106.738-2.106 2.268m-1.836 1.764v-1.746c0-2.574 1.494-3.888 3.942-3.888 2.466 0 3.942 1.314 3.942 3.87v1.782c0 2.556-1.476 3.888-3.942 3.888-2.448 0-3.942-1.332-3.942-3.906m10.059-5.292h1.206l.396 1.044c.918-.918 1.89-1.386 3.186-1.386 2.232 0 3.222 1.314 3.222 3.582V18h-1.854v-5.526c0-1.296-.558-2.052-1.908-2.052-.972 0-1.692.378-2.394 1.08V18h-1.854zm10.012 5.976h1.71v.144c0 1.188.612 1.566 2.052 1.566 1.422 0 2.088-.378 2.088-1.314 0-.63-.288-.936-.99-1.098-.756-.18-2.034-.198-2.952-.432-1.188-.306-1.782-.954-1.782-2.322 0-2.16 1.476-2.844 3.654-2.844 2.25 0 3.582.72 3.582 2.988v.18h-1.656v-.162c0-1.242-.72-1.53-1.962-1.53-1.116 0-1.872.234-1.872 1.314 0 .63.252.9.9 1.062.684.162 2.34.306 3.15.504.954.234 1.638.792 1.638 2.268 0 2.052-1.35 2.844-3.744 2.844s-3.816-.774-3.816-3.024z"
-            />
-          </svg>
+    <>
+      <header className="navbar">
+        <div className="navbar__left">
+          <div className="navbar__brand" aria-label="Navy Innovations">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="154"
+              height="24"
+              fill="none"
+              viewBox="0 0 154 24"
+            >
+              <path
+                fill="#fff"
+                d="M32.71 6h1.838l3.357 5.184L41.173 6h1.714v.648l-4.081 6.39v5.31H36.88v-5.31l-4.17-6.39zM21.117 6h1.784l3.233 9.846L29.491 6h1.749v.648l-4.134 11.7H25.18l-4.063-11.7zM19.59 16.206h-5.212l-.725 2.142h-1.731V17.7L16.092 6h1.925l4.028 11.7v.648h-1.75zm-2.545-7.758-2.668 7.758h5.212zM0 6h2.12l5.865 8.892V6H9.84v12.348H8.091L1.855 9.006v9.342H0zM50.195 0H154v24H50.195z"
+              />
+              <path
+                fill="#000"
+                d="M57.6 5.652h.881V18h-1.98V6.858zm3.466 3.51h1.206l.397 1.044c.918-.918 1.89-1.386 3.186-1.386 2.231 0 3.221 1.314 3.221 3.582V18h-1.853v-5.526c0-1.296-.558-2.052-1.909-2.052-.971 0-1.691.378-2.393 1.08V18h-1.855zm10.354 0h1.206l.396 1.044c.918-.918 1.89-1.386 3.186-1.386 2.232 0 3.222 1.314 3.222 3.582V18h-1.854v-5.526c0-1.296-.558-2.052-1.908-2.052-.972 0-1.692.378-2.394 1.08V18H71.42zm11.992 3.528v1.782c0 1.458.737 2.286 2.105 2.286s2.124-.846 2.124-2.286v-1.8c0-1.494-.756-2.25-2.124-2.25-1.367 0-2.105.738-2.105 2.268m-1.837 1.764v-1.746c0-2.574 1.495-3.888 3.942-3.888 2.467 0 3.943 1.314 3.943 3.87v1.782c0 2.556-1.476 3.888-3.942 3.888-2.448 0-3.942-1.332-3.942-3.906m8.973-5.292h1.674l2.466 6.912 2.574-6.912H98.9v.522L95.66 18h-1.962l-3.15-8.316zm9.804 2.898v-.144c0-1.962 1.512-3.096 3.744-3.096 2.088 0 3.78 1.008 3.78 3.888V18h-1.188l-.306-.756c-.846.666-2.232 1.044-3.312 1.044-2.07 0-3.006-1.35-3.006-2.898 0-2.124 1.728-2.718 3.492-2.718 1.134 0 1.944.036 2.574.054v-.18c0-1.62-.864-2.178-2.088-2.178-1.17 0-1.998.54-1.998 1.584v.108zm3.132 4.734c.9 0 1.836-.324 2.646-.81V13.95a70 70 0 0 0-2.034-.036c-1.62 0-2.304.27-2.304 1.368 0 .99.54 1.512 1.692 1.512m6.028-6.678.882-.954h.342v-1.89l1.026-1.152h.828v3.042h2.34v1.566h-2.34v3.888c0 1.35.414 1.818 1.656 1.818h.72V18h-.756c-2.592 0-3.474-1.206-3.474-3.384v-3.888h-1.224zm8.127-.954h.828V18h-1.854v-7.686zm-1.026-3.852h1.854v2.268h-1.854zm5.875 7.38v1.782c0 1.458.738 2.286 2.106 2.286s2.124-.846 2.124-2.286v-1.8c0-1.494-.756-2.25-2.124-2.25s-2.106.738-2.106 2.268m-1.836 1.764v-1.746c0-2.574 1.494-3.888 3.942-3.888 2.466 0 3.942 1.314 3.942 3.87v1.782c0 2.556-1.476 3.888-3.942 3.888-2.448 0-3.942-1.332-3.942-3.906m10.059-5.292h1.206l.396 1.044c.918-.918 1.89-1.386 3.186-1.386 2.232 0 3.222 1.314 3.222 3.582V18h-1.854v-5.526c0-1.296-.558-2.052-1.908-2.052-.972 0-1.692.378-2.394 1.08V18h-1.854zm10.012 5.976h1.71v.144c0 1.188.612 1.566 2.052 1.566 1.422 0 2.088-.378 2.088-1.314 0-.63-.288-.936-.99-1.098-.756-.18-2.034-.198-2.952-.432-1.188-.306-1.782-.954-1.782-2.322 0-2.16 1.476-2.844 3.654-2.844 2.25 0 3.582.72 3.582 2.988v.18h-1.656v-.162c0-1.242-.72-1.53-1.962-1.53-1.116 0-1.872.234-1.872 1.314 0 .63.252.9.9 1.062.684.162 2.34.306 3.15.504.954.234 1.638.792 1.638 2.268 0 2.052-1.35 2.844-3.744 2.844s-3.816-.774-3.816-3.024z"
+              />
+            </svg>
+          </div>
+
+          <nav aria-label="Primary">
+            <ul className="navbar__menu">
+              {MENU.map((item) => {
+                const isActive = item.id === active;
+                return (
+                  <li key={item.id}>
+                    <button
+                      type="button"
+                      className={`navbar__link${isActive ? ' is-active' : ''}`}
+                      aria-current={isActive ? 'page' : undefined}
+                      onClick={() => setActive(item.id)}
+                    >
+                      {isActive && (
+                        <motion.span
+                          layoutId="navbar-pill"
+                          className="navbar__pill"
+                          transition={{
+                            type: 'spring',
+                            stiffness: 400,
+                            damping: 32
+                          }}
+                        />
+                      )}
+                      <span className="navbar__label">{t(item.labelKey)}</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
         </div>
 
-        <nav aria-label="Primary">
-          <ul className="navbar__menu">
-            {MENU.map((item) => {
-              const isActive = item.id === active;
-              return (
-                <li key={item.id}>
-                  <button
-                    type="button"
-                    className={`navbar__link${isActive ? ' is-active' : ''}`}
-                    aria-current={isActive ? 'page' : undefined}
-                    onClick={() => setActive(item.id)}
-                  >
-                    {isActive && (
-                      <motion.span
-                        layoutId="navbar-pill"
-                        className="navbar__pill"
-                        transition={{
-                          type: 'spring',
-                          stiffness: 400,
-                          damping: 32
-                        }}
-                      />
-                    )}
-                    <span className="navbar__label">{t(item.labelKey)}</span>
-                  </button>
-                </li>
-              );
-            })}
+        <div className="navbar__right">
+          <SoundButton />
+          <LanguageFlag />
+          <MenuBarClock />
+          <button
+            type="button"
+            className="navbar__hamburger"
+            onClick={toggleMenu}
+            aria-expanded={menuOpen}
+            aria-controls="navbar-mobile-drawer"
+            aria-label={menuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
+          >
+            {menuOpen ? (
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21.879 21.88L11.0005 11M21.879 11.001L11 21.88L21.879 11.001Z" stroke="currentColor" strokeWidth="1.2" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            ) : (
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="6.40039" y="19.2002" width="19.2" height="1.06667" fill="currentColor"/>
+                <rect x="6.40039" y="11.7334" width="19.2" height="1.06667" fill="currentColor"/>
+              </svg>
+            )}
+          </button>
+        </div>
+      </header>
+
+      <div
+        id="navbar-mobile-drawer"
+        className={`navbar__drawer${menuOpen ? ' is-open' : ''}`}
+        aria-hidden={!menuOpen}
+      >
+        <nav aria-label="Mobile navigation">
+          <ul className="navbar__drawer-nav">
+            {MENU.map((item) => (
+              <li key={item.id}>
+                <a
+                  href={`#${item.id}`}
+                  className="navbar__drawer-link"
+                  onClick={() => {
+                    setActive(item.id);
+                    closeMenu();
+                  }}
+                >
+                  {t(item.labelKey)}
+                </a>
+              </li>
+            ))}
           </ul>
         </nav>
-      </div>
 
-      <div className="navbar__right">
-        <SoundButton />
-        <LanguageFlag />
-        <MenuBarClock />
+        <a className="navbar__drawer-cta" href="#contact" onClick={closeMenu}>
+          <span className="navbar__drawer-cta-label">{t('nav.bookCall')}</span>
+          <span className="navbar__drawer-cta-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M9 6l6 6-6 6"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+        </a>
+
+        <div className="navbar__drawer-footer">
+          <ul className="navbar__drawer-socials" aria-label={t('footer.social.ariaLabel')}>
+            {MOBILE_SOCIALS.map((s) => (
+              <li key={s.id}>
+                <a
+                  className="navbar__drawer-social"
+                  href={s.href}
+                  aria-label={t(s.labelKey)}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  <img src={s.icon} alt="" width={24} height={24} />
+                </a>
+              </li>
+            ))}
+          </ul>
+          <LanguageFlag />
+        </div>
       </div>
-    </header>
+    </>
   );
 }
 

@@ -1,0 +1,177 @@
+.contact {
+  width: 100%;
+  padding: 80px 0;
+}
+
+.contact__inner {
+  width: 100%;
+  max-width: 820px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.contact__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 40px;
+
+  svg {
+    width: 36px;
+    height: auto;
+  }
+}
+
+/* ── Options ─────────────────────────────────────────── */
+
+.contact__options {
+  --row-h: 56px;
+
+  display: none;
+  position: relative;
+  margin-bottom: 40px;
+}
+
+@media (min-width: 768px) {
+  .contact__options {
+    display: block;
+  }
+}
+
+/* Sliding selection frame — smooth transition, no animation */
+.contact__frame {
+  position: absolute;
+  inset-inline: 0;
+  height: var(--row-h);
+  top: calc(var(--active-idx, 0) * var(--row-h));
+  border: 1px solid var(--text);
+  pointer-events: none;
+  transition: top 300ms var(--ease);
+}
+
+/* Corner dots */
+.contact__frame-dot {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: var(--text);
+}
+
+.contact__frame-dot--tl { top: -3px;    left: -3px;  }
+.contact__frame-dot--tr { top: -3px;    right: -3px; }
+.contact__frame-dot--bl { bottom: -3px; left: -3px;  }
+.contact__frame-dot--br { bottom: -3px; right: -3px; }
+
+/* Option rows */
+.contact__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: var(--row-h);
+  padding-inline: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 18px;
+  color: var(--text-dim);
+  position: relative;
+  z-index: 1;
+  transition: color 300ms var(--ease);
+
+  &:hover {
+    color: var(--text);
+  }
+
+  &.is-active {
+    color: var(--text);
+    cursor: default;
+  }
+}
+
+.contact__option-prefix {
+  color: var(--text);
+  opacity: 0;
+  transition: opacity 150ms;
+}
+
+.contact__option.is-active .contact__option-prefix {
+  opacity: 1;
+}
+
+/* ── Glitch overlay ──────────────────────────────────── */
+/*
+ * A duplicate of the active row's text, rendered in --orange.
+ * clip-path slices + horizontal shimmy create a chromatic-aberration
+ * glitch burst after each frame slide.
+ */
+
+.contact__glitch {
+  --clip-one:   polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  --clip-two:   polygon(0 76%, 100% 76%, 100% 100%, 0 100%);
+  --clip-three: polygon(0 44%, 100% 44%, 100% 58%, 0 58%);
+  --clip-four:  polygon(0 0, 100% 0, 100% 0, 0 0);
+  --clip-five:  polygon(0 0, 100% 0, 100% 0, 0 0);
+  --clip-six:   polygon(0 18%, 100% 18%, 100% 78%, 0 78%);
+  --clip-seven: polygon(0 60%, 100% 60%, 100% 86%, 0 86%);
+
+  display: none;
+  position: absolute;
+  inset-inline: 0;
+  height: var(--row-h);
+  top: calc(var(--active-idx, 0) * var(--row-h));
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 16px;
+  font-size: 18px;
+  color: var(--glitch-color, var(--orange));
+  pointer-events: none;
+  z-index: 2;
+}
+
+.contact__glitch.is-active {
+  display: flex;
+  animation: contact-glitch-anim 0.7s linear 1 forwards;
+}
+
+@keyframes contact-glitch-anim {
+  0%        { clip-path: var(--clip-one); }
+  2%, 8%    { clip-path: var(--clip-two);   transform: translate(-6px, 0); }
+  6%        { clip-path: var(--clip-two);   transform: translate(6px, 0); }
+  9%        { clip-path: var(--clip-two);   transform: translate(0, 0); }
+  10%       { clip-path: var(--clip-three); transform: translate(4px, 0); }
+  13%       { clip-path: var(--clip-three); transform: translate(0, 0); }
+  14%, 21%  { clip-path: var(--clip-four);  transform: translate(4px, 0); }
+  25%       { clip-path: var(--clip-five);  transform: translate(4px, 0); }
+  30%       { clip-path: var(--clip-five);  transform: translate(-4px, 0); }
+  35%, 45%  { clip-path: var(--clip-six);   transform: translate(-4px, 0); }
+  40%       { clip-path: var(--clip-six);   transform: translate(4px, 0); }
+  50%       { clip-path: var(--clip-six);   transform: translate(0, 0); }
+  55%       { clip-path: var(--clip-seven); transform: translate(4px, 0); }
+  60%       { clip-path: var(--clip-seven); transform: translate(0, 0); }
+  31%, 61%, 100% { clip-path: var(--clip-four); }
+}
+
+.contact__emails {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+.contact__email {
+  font-size: 20px;
+  line-height: 1.2;
+  color: var(--text-dim);
+  text-decoration: none;
+}

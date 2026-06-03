@@ -30,7 +30,8 @@ export type SoundName =
   | 'click'
   | 'toggle'
   | 'cell'
-  | 'appear';
+  | 'appear'
+  | 'glitch';
 
 export const sounds: Record<SoundName, SoundDef> = {
   hover: {
@@ -55,5 +56,7 @@ export const sounds: Record<SoundName, SoundDef> = {
   toggle: {
     kind: 'synth',
     spec: { type: 'sine', frequency: 660, duration: 0.1, gain: 0.1 }
-  }
+  },
+  // Drop /public/sounds/glitch.mp3 to replace; engine fails silent until then.
+  glitch: { kind: 'file', src: '/sounds/glitch.mp3' }
 };

@@ -11,6 +11,7 @@ import { Technologies } from './components/Technologies';
 import { Benefits } from './components/Benefits';
 import { Testimonials } from './components/Testimonials';
 import { Locations } from './components/Locations';
+import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { ScrollHint } from './components/ScrollHint';
 
@@ -35,7 +36,8 @@ export default function App() {
         <Technologies />
         <Testimonials />
         <Benefits />
-        {/* <Locations /> */}
+        <Locations />
+        <Contact />
       </main>
 
       <Footer />

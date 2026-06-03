@@ -10,6 +10,7 @@
     "lint": "tsc -b --noEmit"
   },
   "dependencies": {
+    "@calcom/embed-react": "^1.5.3",
     "cobe": "^2.0.1",
     "i18next": "^26.3.0",
     "i18next-browser-languagedetector": "^8.2.1",

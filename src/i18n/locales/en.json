@@ -6,8 +6,8 @@
     "subtitle": "Deployed to Solve",
     "title": "No Fluff. Just Delivery.",
     "text": "We integrate senior consultants, teams, and execution to help you build faster, reduce waste, and see real return on your investment.",
-    "ctaPrimary": "Explore services",
-    "ctaSecondary": "Book a consultation",
+    "ctaPrimary": "Book a call",
+    "ctaSecondary": "Explore services",
     "grid": {
       "ariaLabel": "Capabilities",
       "engine": "Engine",
@@ -113,20 +113,48 @@
   "technologies": {
     "ariaLabel": "Technologies",
     "title": "Technologies",
-    "apple": { "alt": "Apple" },
-    "android": { "alt": "Android" },
-    "flutter": { "alt": "Flutter" },
-    "docker": { "alt": "Docker" },
-    "vue": { "alt": "Vue.js" },
-    "playwright": { "alt": "Playwright" },
-    "python": { "alt": "Python" },
-    "aws": { "alt": "Amazon Web Services" },
-    "cypress": { "alt": "Cypress" },
-    "react": { "alt": "React" },
-    "nodejs": { "alt": "Node.js" },
-    "java": { "alt": "Java" },
-    "googleCloud": { "alt": "Google Cloud" },
-    "nextjs": { "alt": "Next.js" }
+    "apple": {
+      "alt": "Apple"
+    },
+    "android": {
+      "alt": "Android"
+    },
+    "flutter": {
+      "alt": "Flutter"
+    },
+    "docker": {
+      "alt": "Docker"
+    },
+    "vue": {
+      "alt": "Vue.js"
+    },
+    "playwright": {
+      "alt": "Playwright"
+    },
+    "python": {
+      "alt": "Python"
+    },
+    "aws": {
+      "alt": "Amazon Web Services"
+    },
+    "cypress": {
+      "alt": "Cypress"
+    },
+    "react": {
+      "alt": "React"
+    },
+    "nodejs": {
+      "alt": "Node.js"
+    },
+    "java": {
+      "alt": "Java"
+    },
+    "googleCloud": {
+      "alt": "Google Cloud"
+    },
+    "nextjs": {
+      "alt": "Next.js"
+    }
   },
   "testimonials": {
     "ariaLabel": "Client testimonials",
@@ -153,9 +181,15 @@
   "benefits": {
     "ariaLabel": "Why choose us?",
     "title": "Why choose us?",
-    "senior": { "label": "Senior-only" },
-    "partnership": { "label": "Long-term partnership" },
-    "delivery": { "label": "Built for delivery" }
+    "senior": {
+      "label": "Senior-only"
+    },
+    "partnership": {
+      "label": "Long-term partnership"
+    },
+    "delivery": {
+      "label": "Built for delivery"
+    }
   },
   "locations": {
     "ariaLabel": "Our locations",
@@ -167,12 +201,27 @@
     "unitedStates": "United States of America",
     "kosovo": "Kosovo"
   },
+  "contact": {
+    "ariaLabel": "Contact us",
+    "title": "Contact us",
+    "emailSales": "sales@navyin.com",
+    "emailPartner": "partner@navyin.com",
+    "options": {
+      "prefix": "I Need...",
+      "consultants": "to hire consultants",
+      "teams": "to hire teams",
+      "webApp": "create a web or app application"
+    }
+  },
   "nav": {
     "home": "Home",
     "services": "Services",
     "technologies": "Tech stack",
     "whyUs": "Why us",
-    "contact": "Contact"
+    "contact": "Contact",
+    "bookCall": "Book a call",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu"
   },
   "footer": {
     "copyright": "® Copyright {{year}} | NavyInnovations.com",

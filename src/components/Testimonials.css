@@ -43,7 +43,11 @@
   --mx: 50%;
   --my: 50%;
 
-  transition: scale 0.25s var(--ease);
+  transition: scale 0.25s var(--ease), background 300ms var(--ease);
+
+  background:
+    linear-gradient(var(--bg), var(--bg)) padding-box,
+    linear-gradient(180deg, var(--border) 50%, transparent 95%) border-box;
 
   &:hover {
     scale: 1.02;
@@ -51,19 +55,19 @@
   }
 }
 
-.testimonials__card--blue {
+.testimonials__card--blue:hover {
   background:
     linear-gradient(var(--bg), var(--bg)) padding-box,
     linear-gradient(180deg, var(--blue) 50%, transparent 95%) border-box;
 }
 
-.testimonials__card--green {
+.testimonials__card--green:hover {
   background:
     linear-gradient(var(--bg), var(--bg)) padding-box,
     linear-gradient(180deg, var(--green) 50%, transparent 95%) border-box;
 }
 
-.testimonials__card--orange {
+.testimonials__card--orange:hover {
   background:
     linear-gradient(var(--bg), var(--bg)) padding-box,
     linear-gradient(180deg, var(--orange) 50%, transparent 95%) border-box;
