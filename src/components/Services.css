@@ -133,6 +133,10 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
+
+  /* Only used by the reduced-motion (un-pinned) layout, where the Dock deep
+     links scroll-into-view natively; the pinned layout positions via script. */
+  scroll-margin-top: calc(var(--nav-offset) + 12px);
 }
 
 .services__item--consultants {

@@ -14,9 +14,20 @@ import { Locations } from './components/Locations';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { ScrollHint } from './components/ScrollHint';
+import { useScrollReveal } from './hooks/useScrollReveal';
 
 export default function App() {
   const { i18n } = useTranslation();
+
+  // Reveal sections as they scroll into view (no-op under reduced motion).
+  useScrollReveal();
+
+  // Land at the top on load. Paired with history.scrollRestoration='manual'
+  // (main.tsx): the pinned sections resize the page after mount, so any restored
+  // position would be wrong — most often dumping the user into Locations.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // Keep <html lang> in sync with the active locale.
   useEffect(() => {

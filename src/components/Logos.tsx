@@ -15,7 +15,7 @@ export function Logos() {
 
   return (
     <section className="logos" aria-label={t('logos.ariaLabel')}>
-      <div className="logos__track-wrap">
+      <div className="logos__track-wrap" data-reveal-fade>
         <ul className="logos__track">
           {([false, true] as const).flatMap((isDup) =>
             LOGOS.map((logo, i) => (

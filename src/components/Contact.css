@@ -46,7 +46,7 @@
   inset-inline: 0;
   height: var(--row-h);
   top: calc(var(--active-idx, 0) * var(--row-h));
-  border: 1px solid var(--text);
+  border: 1px solid var(--border);
   pointer-events: none;
   transition: top 300ms var(--ease);
 }
@@ -54,15 +54,31 @@
 /* Corner dots */
 .contact__frame-dot {
   position: absolute;
-  width: 5px;
-  height: 5px;
+  width: 3px;
+  height: 3px;
   background: var(--text);
+  border-radius: 50%;
 }
 
-.contact__frame-dot--tl { top: -3px;    left: -3px;  }
-.contact__frame-dot--tr { top: -3px;    right: -3px; }
-.contact__frame-dot--bl { bottom: -3px; left: -3px;  }
-.contact__frame-dot--br { bottom: -3px; right: -3px; }
+.contact__frame-dot--tl {
+  top: -2px;
+  left: -2px;
+}
+
+.contact__frame-dot--tr {
+  top: -2px;
+  right: -2px;
+}
+
+.contact__frame-dot--bl {
+  bottom: -2px;
+  left: -2px;
+}
+
+.contact__frame-dot--br {
+  bottom: -2px;
+  right: -2px;
+}
 
 /* Option rows */
 .contact__option {
@@ -110,12 +126,12 @@
  */
 
 .contact__glitch {
-  --clip-one:   polygon(0 0, 100% 0, 100% 100%, 0 100%);
-  --clip-two:   polygon(0 76%, 100% 76%, 100% 100%, 0 100%);
+  --clip-one: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  --clip-two: polygon(0 76%, 100% 76%, 100% 100%, 0 100%);
   --clip-three: polygon(0 44%, 100% 44%, 100% 58%, 0 58%);
-  --clip-four:  polygon(0 0, 100% 0, 100% 0, 0 0);
-  --clip-five:  polygon(0 0, 100% 0, 100% 0, 0 0);
-  --clip-six:   polygon(0 18%, 100% 18%, 100% 78%, 0 78%);
+  --clip-four: polygon(0 0, 100% 0, 100% 0, 0 0);
+  --clip-five: polygon(0 0, 100% 0, 100% 0, 0 0);
+  --clip-six: polygon(0 18%, 100% 18%, 100% 78%, 0 78%);
   --clip-seven: polygon(0 60%, 100% 60%, 100% 86%, 0 86%);
 
   display: none;
@@ -138,21 +154,69 @@
 }
 
 @keyframes contact-glitch-anim {
-  0%        { clip-path: var(--clip-one); }
-  2%, 8%    { clip-path: var(--clip-two);   transform: translate(-6px, 0); }
-  6%        { clip-path: var(--clip-two);   transform: translate(6px, 0); }
-  9%        { clip-path: var(--clip-two);   transform: translate(0, 0); }
-  10%       { clip-path: var(--clip-three); transform: translate(4px, 0); }
-  13%       { clip-path: var(--clip-three); transform: translate(0, 0); }
-  14%, 21%  { clip-path: var(--clip-four);  transform: translate(4px, 0); }
-  25%       { clip-path: var(--clip-five);  transform: translate(4px, 0); }
-  30%       { clip-path: var(--clip-five);  transform: translate(-4px, 0); }
-  35%, 45%  { clip-path: var(--clip-six);   transform: translate(-4px, 0); }
-  40%       { clip-path: var(--clip-six);   transform: translate(4px, 0); }
-  50%       { clip-path: var(--clip-six);   transform: translate(0, 0); }
-  55%       { clip-path: var(--clip-seven); transform: translate(4px, 0); }
-  60%       { clip-path: var(--clip-seven); transform: translate(0, 0); }
-  31%, 61%, 100% { clip-path: var(--clip-four); }
+  0% {
+    clip-path: var(--clip-one);
+  }
+  2%,
+  8% {
+    clip-path: var(--clip-two);
+    transform: translate(-6px, 0);
+  }
+  6% {
+    clip-path: var(--clip-two);
+    transform: translate(6px, 0);
+  }
+  9% {
+    clip-path: var(--clip-two);
+    transform: translate(0, 0);
+  }
+  10% {
+    clip-path: var(--clip-three);
+    transform: translate(4px, 0);
+  }
+  13% {
+    clip-path: var(--clip-three);
+    transform: translate(0, 0);
+  }
+  14%,
+  21% {
+    clip-path: var(--clip-four);
+    transform: translate(4px, 0);
+  }
+  25% {
+    clip-path: var(--clip-five);
+    transform: translate(4px, 0);
+  }
+  30% {
+    clip-path: var(--clip-five);
+    transform: translate(-4px, 0);
+  }
+  35%,
+  45% {
+    clip-path: var(--clip-six);
+    transform: translate(-4px, 0);
+  }
+  40% {
+    clip-path: var(--clip-six);
+    transform: translate(4px, 0);
+  }
+  50% {
+    clip-path: var(--clip-six);
+    transform: translate(0, 0);
+  }
+  55% {
+    clip-path: var(--clip-seven);
+    transform: translate(4px, 0);
+  }
+  60% {
+    clip-path: var(--clip-seven);
+    transform: translate(0, 0);
+  }
+  31%,
+  61%,
+  100% {
+    clip-path: var(--clip-four);
+  }
 }
 
 .contact__emails {

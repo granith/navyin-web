@@ -61,13 +61,16 @@ export function Partnerships() {
   return (
     <section className="partnerships" aria-label={t('partnerships.ariaLabel')}>
       <div className="partnerships__inner">
-        <h2 className="partnerships__title">{t('partnerships.title')}</h2>
+        <h2 className="partnerships__title" data-reveal data-reveal-late>
+          {t('partnerships.title')}
+        </h2>
 
-        <ul className="partnerships__grid">
-          {PARTNERS.map((partner) => (
+        <ul className="partnerships__grid" data-reveal-fade data-reveal-late>
+          {PARTNERS.map((partner, i) => (
             <li
               key={partner.id}
               className="partnerships__card"
+              style={{ '--i': i } as React.CSSProperties}
               onMouseEnter={playClick}
             >
               <div className="partnerships__media">

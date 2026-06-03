@@ -75,12 +75,16 @@ export function Testimonials() {
   }, []);
 
   return (
-    <section className="testimonials" aria-label={t('testimonials.ariaLabel')}>
+    <section className="testimonials" id="testimonials" aria-label={t('testimonials.ariaLabel')}>
       <div className="testimonials__inner">
-        <h2 className="testimonials__heading">{t('testimonials.title')}</h2>
+        <h2 className="testimonials__heading" data-reveal data-reveal-late>
+          {t('testimonials.title')}
+        </h2>
 
         <ul
           className={`testimonials__grid${active ? ' is-active' : ''}`}
+          data-reveal-fade
+          data-reveal-late
           onMouseMove={handleMove}
           onMouseEnter={() => setActive(true)}
           onMouseLeave={() => setActive(false)}
@@ -90,6 +94,7 @@ export function Testimonials() {
               key={item.id}
               ref={(el) => { cardRefs.current[i] = el; }}
               className={`testimonials__card testimonials__card--${item.color}`}
+              style={{ '--i': i } as React.CSSProperties}
               onMouseEnter={playClick}
             >
               <span className="testimonials__spotlight" aria-hidden="true" />

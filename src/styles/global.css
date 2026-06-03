@@ -13,6 +13,10 @@
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
+  /* Scroll-reveal: distance content rises and how long it takes (see below). */
+  --reveal-shift: 1.25rem;
+  --reveal-dur: 0.8s;
+
   --font-system:
     -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
     system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -35,12 +39,29 @@
   padding: 0;
 }
 
+html {
+  /* Smooth in-page navigation (nav menu, dock, anchor CTAs). Reduced-motion
+     users jump instantly — the rule simply doesn't apply to them. */
+  @media (prefers-reduced-motion: no-preference) {
+    scroll-behavior: smooth;
+  }
+}
+
 body {
   font-family: var(--font);
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Anchor targets clear the sticky menu bar when scrolled to. */
+#home,
+#services,
+#technologies,
+#testimonials,
+#contact {
+  scroll-margin-top: calc(var(--nav-offset) + 12px);
 }
 
 .app {
@@ -56,6 +77,38 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
+}
+
+/*
+ * Scroll reveal. `useScrollReveal` adds `is-in` to each [data-reveal] /
+ * [data-reveal-fade] element as it enters the viewport. The hidden base states
+ * live behind `no-preference` so reduced-motion users (and anyone the script
+ * doesn't reach) always see content.
+ *   - data-reveal       → fade + rise (section titles, content blocks)
+ *   - data-reveal-fade  → fade only   (grid containers; their items rise on
+ *                                       their own — see each component's CSS —
+ *                                       and pinned/sticky blocks that must not
+ *                                       be transformed)
+ */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal],
+  [data-reveal-fade] {
+    opacity: 0;
+    transition: opacity var(--reveal-dur) var(--ease) var(--reveal-delay, 0s);
+  }
+
+  [data-reveal] {
+    transform: translateY(var(--reveal-shift));
+    transition:
+      opacity var(--reveal-dur) var(--ease) var(--reveal-delay, 0s),
+      transform var(--reveal-dur) var(--ease) var(--reveal-delay, 0s);
+  }
+
+  [data-reveal][data-in],
+  [data-reveal-fade][data-in] {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -93,6 +93,12 @@ export function Locations() {
   const pendingRef = useRef<number | null>(null);
   const playRef = useRef(play);
   playRef.current = play;
+  // Rate-limits the scroll-driven country chime so a fast scroll-through (e.g.
+  // tapping a nav link that scrolls past this section) doesn't machine-gun it.
+  const lastScrollSoundRef = useRef(0);
+  // True while the navbar is scrolling the page past this section: the globe and
+  // list freeze instead of whipping through every country (released on arrival).
+  const suppressScrollRef = useRef(false);
 
   // ── Pin + scroll-driven active index ──────────────────────────────────────
   useLayoutEffect(() => {
@@ -123,6 +129,20 @@ export function Locations() {
         0,
         travelRef.current,
       );
+      // While the navbar scrolls past: keep the globe still and the chime silent,
+      // but let the list glide with the scroll (continuous, no centre-snap — the
+      // transition is disabled in onNavScroll so it tracks 1:1).
+      if (suppressScrollRef.current) {
+        const span = LOCATIONS.length - 1;
+        const frac = clamp(scrolled / stepRef.current, 0, span);
+        const i0 = Math.floor(frac);
+        const i1 = Math.min(i0 + 1, span);
+        const centers = centersRef.current;
+        const y =
+          (centers[i0] ?? 0) + ((centers[i1] ?? 0) - (centers[i0] ?? 0)) * (frac - i0);
+        track.style.transform = `translate3d(0, ${y}px, 0)`;
+        return;
+      }
       const next = Math.round(scrolled / stepRef.current);
       // A click set a destination: skip the countries the smooth scroll passes
       // through, only resuming once we land on (or the user scrolls past) it.
@@ -134,7 +154,11 @@ export function Locations() {
 
       activeRef.current = next;
       setActive(next);
-      playRef.current('hover');
+      const now = performance.now();
+      if (now - lastScrollSoundRef.current > HOVER_THROTTLE_MS * 2) {
+        lastScrollSoundRef.current = now;
+        playRef.current('hover');
+      }
       const [lat, long] = LOCATIONS[next].coords;
       focusRef.current = locationToAngles(lat, long);
       track.style.transform = `translate3d(0, ${centersRef.current[next] ?? 0}px, 0)`;
@@ -173,16 +197,41 @@ export function Locations() {
     ro.observe(list);
     ro.observe(track);
 
+    // Leave loose-glide mode: re-enable the list's centre-snap transition.
+    const resume = () => {
+      suppressScrollRef.current = false;
+      track.style.transition = '';
+    };
+
     // If the user grabs the scroll mid-animation, abandon the click target and
-    // resume normal step-by-step tracking from wherever they end up.
+    // any nav-scroll freeze, resuming normal tracking from wherever they end up.
     const cancelPending = () => {
       pendingRef.current = null;
+      resume();
+    };
+
+    // A programmatic in-page scroll brackets itself with `navscroll` /
+    // `navscrollend` (see lib/scroll): glide loosely for its duration (globe
+    // frozen, list tracking scroll 1:1 via a disabled transition), with a
+    // timeout backstop in case the end event is missed.
+    let suppressTimer = 0;
+    const onNavScroll = () => {
+      suppressScrollRef.current = true;
+      track.style.transition = 'none';
+      window.clearTimeout(suppressTimer);
+      suppressTimer = window.setTimeout(resume, 1500);
+    };
+    const onNavScrollEnd = () => {
+      window.clearTimeout(suppressTimer);
+      resume();
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', measure);
     window.addEventListener('wheel', cancelPending, { passive: true });
     window.addEventListener('touchstart', cancelPending, { passive: true });
+    window.addEventListener('navscroll', onNavScroll);
+    window.addEventListener('navscrollend', onNavScrollEnd);
     motionQuery.addEventListener('change', measure);
 
     measure();
@@ -190,10 +239,13 @@ export function Locations() {
     return () => {
       if (frame) cancelAnimationFrame(frame);
       ro.disconnect();
+      window.clearTimeout(suppressTimer);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', measure);
       window.removeEventListener('wheel', cancelPending);
       window.removeEventListener('touchstart', cancelPending);
+      window.removeEventListener('navscroll', onNavScroll);
+      window.removeEventListener('navscrollend', onNavScrollEnd);
       motionQuery.removeEventListener('change', measure);
       section.style.height = '';
       track.style.transform = '';
@@ -326,7 +378,7 @@ export function Locations() {
       <div ref={stickyRef} className="locations__sticky">
         <div className={`locations__inner${ready ? ' is-ready' : ''}`}>
           <div className="locations__intro">
-            <h2 className="locations__title">{t('locations.title')}</h2>
+            <h2 className="locations__title" data-reveal>{t('locations.title')}</h2>
           </div>
 
           <div className="locations__globe">
@@ -338,7 +390,7 @@ export function Locations() {
             <span className="locations__ping" aria-hidden="true" />
           </div>
 
-          <div ref={listRef} className="locations__list">
+          <div ref={listRef} className="locations__list" data-reveal-fade>
             <ul ref={trackRef} className="locations__track">
               {LOCATIONS.map((loc, i) => (
                 <li

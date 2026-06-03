@@ -97,9 +97,9 @@ export function Contact() {
   }
 
   return (
-    <section className="contact" aria-label={t('contact.ariaLabel')}>
+    <section className="contact" id="contact" aria-label={t('contact.ariaLabel')}>
       <div className="contact__inner">
-        <h2 className="contact__title">
+        <h2 className="contact__title" data-reveal>
           <svg
             width="36"
             height="8"
@@ -116,7 +116,10 @@ export function Contact() {
 
         <div
           className="contact__options"
-          style={{ '--active-idx': activeIdx } as React.CSSProperties}
+          data-reveal
+          style={
+            { '--active-idx': activeIdx, '--reveal-delay': '0.08s' } as React.CSSProperties
+          }
         >
           {/* Sliding selection frame */}
           <div ref={frameRef} className="contact__frame" aria-hidden="true">
@@ -160,7 +163,7 @@ export function Contact() {
           ))}
         </div>
 
-        <div className="contact__cal">
+        <div className="contact__cal" data-reveal-fade>
           <Cal
             namespace="15min"
             calLink="administrator-qxpmle/15min"

@@ -53,6 +53,19 @@
     scale: 1.02;
     z-index: 1;
   }
+
+  /* Staggered rise on reveal; the grid fades as a whole (data-reveal-fade). */
+  @media (prefers-reduced-motion: no-preference) {
+    transform: translateY(var(--reveal-shift));
+    transition:
+      scale 0.25s var(--ease),
+      background 300ms var(--ease),
+      transform var(--reveal-dur) var(--ease) calc(var(--i, 0) * 0.08s);
+  }
+}
+
+.testimonials__grid[data-in] .testimonials__card {
+  transform: none;
 }
 
 .testimonials__card--blue:hover {

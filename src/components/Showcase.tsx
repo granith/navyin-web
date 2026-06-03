@@ -85,12 +85,13 @@ export function Showcase() {
 
   return (
     <section className="showcase" id="services" aria-label={t('showcase.ariaLabel')}>
-      <ul className="showcase__list" ref={listRef}>
+      <ul className="showcase__list" ref={listRef} data-reveal-fade>
         {ITEMS.map((item, i) => (
           <li
             key={item.id}
             className={`showcase__item${activeIndex === i ? ' is-active' : ''}`}
             ref={(el) => { itemRefs.current[i] = el; }}
+            style={{ '--i': i } as React.CSSProperties}
           >
             <button
               type="button"

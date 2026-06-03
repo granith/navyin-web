@@ -49,6 +49,18 @@
   aspect-ratio: 400 / 1113;
   z-index: 1;
   transition: z-index 0s linear 0.5s;
+
+  /* Staggered rise on reveal (the list itself fades — see data-reveal-fade). */
+  @media (prefers-reduced-motion: no-preference) {
+    transform: translateY(var(--reveal-shift));
+    transition:
+      z-index 0s linear 0.5s,
+      transform var(--reveal-dur) var(--ease) calc(var(--i, 0) * 0.08s);
+  }
+}
+
+.showcase__list[data-in] .showcase__item {
+  transform: none;
 }
 
 .showcase__item:hover,

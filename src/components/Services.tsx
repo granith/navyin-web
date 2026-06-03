@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ParseKeys } from 'i18next';
 
+import { smoothScrollTo } from '../lib/scroll';
 import './Services.css';
 
 /**
@@ -155,6 +156,41 @@ export function Services() {
     };
   }, []);
 
+  // The Dock deep-links into a service by dispatching `servicescroll` (see
+  // lib/scroll). A native anchor jump can't reach it — the track is translated
+  // by scroll — so we derive the target spot from the same geometry as the pin
+  // above and drive the shared (capped-duration) scroll.
+  useEffect(() => {
+    const onServiceScroll = (event: Event) => {
+      const id = (event as CustomEvent<string>).detail;
+      const section = sectionRef.current;
+      const screen = screenRef.current;
+      const track = trackRef.current;
+      if (!id || !section || !screen || !track) return;
+
+      const article = track.querySelector<HTMLElement>(`.services__item--${id}`);
+      if (!article) return;
+
+      // Static layout (reduced motion): the track is laid out in full, so a
+      // plain scroll-into-view lands correctly.
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        article.scrollIntoView({ block: 'start' });
+        return;
+      }
+
+      const overflow = Math.max(0, track.scrollHeight - screen.clientHeight);
+      // Track travel that brings the article to the top of the window (with a
+      // little headroom), bounded by how far the track can actually move.
+      const y = clamp(article.offsetTop - 24, 0, overflow);
+      const sectionTop = window.scrollY + section.getBoundingClientRect().top;
+      smoothScrollTo(sectionTop - NAV_OFFSET + y);
+    };
+
+    window.addEventListener('servicescroll', onServiceScroll as EventListener);
+    return () =>
+      window.removeEventListener('servicescroll', onServiceScroll as EventListener);
+  }, []);
+
   return (
     <section
       ref={sectionRef}
@@ -162,7 +198,7 @@ export function Services() {
       aria-label={t('services.ariaLabel')}
     >
       <div ref={stickyRef} className="services__sticky">
-        <div className="services__window">
+        <div className="services__window" data-reveal-fade>
           <div className="services__bar">
             <span className="services__lights" aria-hidden="true">
               <span className="services__light services__light--close" />

@@ -47,6 +47,19 @@
   @media (hover: none) {
     opacity: 1;
   }
+
+  /* Staggered rise on reveal; the grid fades as a whole (data-reveal-fade),
+     so we only move the card here — its resting opacity stays untouched. */
+  @media (prefers-reduced-motion: no-preference) {
+    transform: translateY(var(--reveal-shift));
+    transition:
+      opacity 0.2s var(--ease),
+      transform var(--reveal-dur) var(--ease) calc(var(--i, 0) * 0.08s);
+  }
+}
+
+.benefits__grid[data-in] .benefits__card {
+  transform: none;
 }
 
 .benefits__icon {

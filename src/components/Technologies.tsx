@@ -91,13 +91,17 @@ export function Technologies() {
   }, []);
 
   return (
-    <section className="technologies" aria-label={t('technologies.ariaLabel')}>
+    <section className="technologies" id="technologies" aria-label={t('technologies.ariaLabel')}>
       <div className="technologies__inner">
-        <h2 className="technologies__title">{t('technologies.title')}</h2>
+        <h2 className="technologies__title" data-reveal data-reveal-late>
+          {t('technologies.title')}
+        </h2>
 
         <div
           ref={gridRef}
           className={`technologies__grid${active ? ' is-active' : ''}`}
+          data-reveal-fade
+          data-reveal-late
           onMouseMove={handleMove}
           onMouseEnter={() => {
             setActive(true);
@@ -114,6 +118,7 @@ export function Technologies() {
                     cellRefs.current[r * ROW_SIZE + i] = el;
                   }}
                   className="technologies__cell"
+                  style={{ '--i': r * ROW_SIZE + i } as React.CSSProperties}
                 >
                   <svg
                     className="technologies__hex"

@@ -34,11 +34,18 @@ export function Benefits() {
   return (
     <section className="benefits" aria-label={t('benefits.ariaLabel')}>
       <div className="benefits__inner">
-        <h2 className="benefits__title">{t('benefits.title')}</h2>
+        <h2 className="benefits__title" data-reveal data-reveal-late>
+          {t('benefits.title')}
+        </h2>
 
-        <ul className="benefits__grid">
-          {BENEFITS.map((benefit) => (
-            <li key={benefit.id} className="benefits__card" onMouseEnter={() => play('click')}>
+        <ul className="benefits__grid" data-reveal-fade data-reveal-late>
+          {BENEFITS.map((benefit, i) => (
+            <li
+              key={benefit.id}
+              className="benefits__card"
+              style={{ '--i': i } as React.CSSProperties}
+              onMouseEnter={() => play('click')}
+            >
               <img className="benefits__icon" src={ICON} alt="" aria-hidden="true" />
               <p className="benefits__label">{t(benefit.labelKey)}</p>
             </li>

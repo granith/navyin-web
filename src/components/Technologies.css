@@ -61,6 +61,27 @@
     width: 36px;
     height: 40px;
   }
+
+  /* Each hexagon fades + rises on reveal, staggered by --i. */
+  @media (prefers-reduced-motion: no-preference) {
+    opacity: 0;
+    transform: translateY(var(--reveal-shift));
+    transition:
+      scale 0.25s var(--ease),
+      opacity var(--reveal-dur) var(--ease) calc(var(--i, 0) * 0.04s),
+      transform var(--reveal-dur) var(--ease) calc(var(--i, 0) * 0.04s);
+  }
+}
+
+/* The grid is only the reveal trigger here — the cells fade themselves, so the
+   container must not double-fade (override the data-reveal-fade opacity). */
+.technologies__grid[data-reveal-fade] {
+  opacity: 1;
+}
+
+.technologies__grid[data-in] .technologies__cell {
+  opacity: 1;
+  transform: none;
 }
 
 /* Lift the hovered hexagon above its neighbours and zoom it slightly. */

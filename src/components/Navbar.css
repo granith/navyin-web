@@ -49,6 +49,14 @@
   display: inline-flex;
   align-items: center;
   color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.2s var(--ease);
+
+  &:hover {
+    opacity: 0.85;
+  }
 
   & svg,
   & img {
@@ -85,6 +93,7 @@
   font-weight: 590;
   line-height: 16px;
   color: #fff;
+  text-decoration: none;
   text-shadow: 0 1px 6px rgba(204, 204, 204, 0.25);
   white-space: nowrap;
   transition: opacity 0.2s var(--ease);
@@ -229,7 +238,8 @@
   transition: color 0.2s var(--ease);
 
   &:hover,
-  &:active {
+  &:active,
+  &.is-active {
     color: #fff;
   }
 }

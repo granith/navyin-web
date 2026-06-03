@@ -10,6 +10,12 @@
   opacity: 0.55;
   pointer-events: none;
   transition: opacity 0.4s var(--ease);
+
+  /* No Dock on mobile (hidden ≤640px) — sit near the bottom edge instead of
+     floating where the Dock used to be. */
+  @media (max-width: 640px) {
+    bottom: calc(24px + env(safe-area-inset-bottom));
+  }
 }
 
 .scroll-hint.is-hidden {

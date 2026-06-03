@@ -4,6 +4,7 @@ import type { ParseKeys } from 'i18next';
 import { animate, stagger } from 'motion';
 
 import { useSound } from '../sound/SoundProvider';
+import { scrollToSection } from '../lib/scroll';
 import { HeroCell, type CellGraphic, type AnimatedGraphicDef } from './HeroCell';
 import { EngineSvg } from './EngineSvg';
 import { ApiSvg } from './ApiSvg';
@@ -232,9 +233,9 @@ export function Hero() {
   }, [play]);
 
   return (
-    <section className="hero" aria-labelledby="hero-title">
+    <section className="hero" id="home" aria-labelledby="hero-title">
       <div className="hero__container">
-        <div className="hero__content">
+        <div className="hero__content" data-reveal>
           <p className="hero__subtitle">{t('hero.subtitle')}</p>
           <h1 className="hero__title" id="hero-title">
             {t('hero.title')}
@@ -242,7 +243,14 @@ export function Hero() {
           <p className="hero__text">{t('hero.text')}</p>
 
           <div className="hero__ctas">
-            <a className="hero__cta" href="#services">
+            <a
+              className="hero__cta"
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('contact');
+              }}
+            >
               <span className="hero__cta-label">{t('hero.ctaPrimary')}</span>
               <span className="hero__cta-icon" aria-hidden="true">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
@@ -256,7 +264,14 @@ export function Hero() {
                 </svg>
               </span>
             </a>
-            <a className="hero__cta" href="#contact">
+            <a
+              className="hero__cta"
+              href="#services"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection('services');
+              }}
+            >
               <span className="hero__cta-label">{t('hero.ctaSecondary')}</span>
               <span className="hero__cta-icon" aria-hidden="true">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
@@ -273,7 +288,11 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="hero__grid-wrapper">
+        <div
+          className="hero__grid-wrapper"
+          data-reveal
+          style={{ '--reveal-delay': '0.1s' } as React.CSSProperties}
+        >
           <div
             className="hero__grid"
             role="group"
@@ -301,7 +320,11 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="hero__slider-wrapper">
+        <div
+          className="hero__slider-wrapper"
+          data-reveal
+          style={{ '--reveal-delay': '0.1s' } as React.CSSProperties}
+        >
           <HeroSlider />
         </div>
       </div>

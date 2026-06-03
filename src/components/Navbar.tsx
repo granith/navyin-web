@@ -1,19 +1,24 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'motion/react';
 import type { ParseKeys } from 'i18next';
 
 import { useCountry } from '../i18n/CountryProvider';
 import { useSound } from '../sound/SoundProvider';
+import { scrollToSection } from '../lib/scroll';
 import './Navbar.css';
 
-/** Primary menu items. Labels resolve through i18n so the bar stays localized. */
+/**
+ * Primary menu items. Labels resolve through i18n so the bar stays localized.
+ * `target` is the id of the section each item scrolls to (see App's layout):
+ * "Why us" points at the testimonials section, the rest match their own id.
+ */
 const MENU = [
-  { id: 'home', labelKey: 'nav.home' },
-  { id: 'services', labelKey: 'nav.services' },
-  { id: 'technologies', labelKey: 'nav.technologies' },
-  { id: 'whyUs', labelKey: 'nav.whyUs' },
-  { id: 'contact', labelKey: 'nav.contact' }
+  { id: 'home', labelKey: 'nav.home', target: 'home' },
+  { id: 'services', labelKey: 'nav.services', target: 'services' },
+  { id: 'technologies', labelKey: 'nav.technologies', target: 'technologies' },
+  { id: 'whyUs', labelKey: 'nav.whyUs', target: 'testimonials' },
+  { id: 'contact', labelKey: 'nav.contact', target: 'contact' }
 ] as const;
 
 type MenuId = (typeof MENU)[number]['id'];
@@ -60,6 +65,18 @@ export function Navbar() {
   const closeMenu = useCallback(() => setMenuOpen(false), []);
   const toggleMenu = useCallback(() => setMenuOpen((o) => !o), []);
 
+  // While a click-driven smooth scroll is travelling, the spy holds the pill on
+  // the destination instead of letting it race through the sections in between.
+  const spyLock = useRef(false);
+  const spyTarget = useRef<MenuId | null>(null);
+
+  const goTo = useCallback((id: MenuId, target: string) => {
+    setActive(id);
+    spyTarget.current = id;
+    spyLock.current = true;
+    scrollToSection(target);
+  }, []);
+
   useEffect(() => {
     if (!menuOpen) return;
     const handler = (e: KeyboardEvent) => {
@@ -69,11 +86,77 @@ export function Navbar() {
     return () => document.removeEventListener('keydown', handler);
   }, [menuOpen]);
 
+  // Scroll spy: the active item is the section currently sitting at the top of
+  // the page — the lowest one whose top has scrolled above a line just beneath
+  // the menu bar. This stays put as you scroll within a section (no jitter) and
+  // correctly highlights short sections and click-targets that pin at the top
+  // (a centre-of-viewport test missed both).
+  useEffect(() => {
+    const items = MENU.map((item) => ({
+      id: item.id,
+      el: document.getElementById(item.target)
+    })).filter((x): x is { id: MenuId; el: HTMLElement } => x.el !== null);
+    if (!items.length) return;
+
+    const navOffset = () =>
+      parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue('--nav-offset'),
+        10
+      ) || 34;
+
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const line = navOffset() + 24;
+      let current = items[0].id;
+      for (const { id, el } of items) {
+        if (el.getBoundingClientRect().top <= line) current = id;
+      }
+      if (spyLock.current) {
+        // Hold on the click target until we arrive; then resume live tracking.
+        if (current === spyTarget.current) spyLock.current = false;
+        else return;
+      }
+      setActive(current);
+    };
+
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    // A manual scroll gesture hands control back to the spy mid-flight.
+    const release = () => {
+      spyLock.current = false;
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    window.addEventListener('wheel', release, { passive: true });
+    window.addEventListener('touchmove', release, { passive: true });
+    update();
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      window.removeEventListener('wheel', release);
+      window.removeEventListener('touchmove', release);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
+
   return (
     <>
       <header className="navbar">
         <div className="navbar__left">
-          <div className="navbar__brand" aria-label="Navy Innovations">
+          <a
+            className="navbar__brand"
+            href="#home"
+            aria-label="Navy Innovations"
+            onClick={(e) => {
+              e.preventDefault();
+              goTo('home', 'home');
+              closeMenu();
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="154"
@@ -90,7 +173,7 @@ export function Navbar() {
                 d="M57.6 5.652h.881V18h-1.98V6.858zm3.466 3.51h1.206l.397 1.044c.918-.918 1.89-1.386 3.186-1.386 2.231 0 3.221 1.314 3.221 3.582V18h-1.853v-5.526c0-1.296-.558-2.052-1.909-2.052-.971 0-1.691.378-2.393 1.08V18h-1.855zm10.354 0h1.206l.396 1.044c.918-.918 1.89-1.386 3.186-1.386 2.232 0 3.222 1.314 3.222 3.582V18h-1.854v-5.526c0-1.296-.558-2.052-1.908-2.052-.972 0-1.692.378-2.394 1.08V18H71.42zm11.992 3.528v1.782c0 1.458.737 2.286 2.105 2.286s2.124-.846 2.124-2.286v-1.8c0-1.494-.756-2.25-2.124-2.25-1.367 0-2.105.738-2.105 2.268m-1.837 1.764v-1.746c0-2.574 1.495-3.888 3.942-3.888 2.467 0 3.943 1.314 3.943 3.87v1.782c0 2.556-1.476 3.888-3.942 3.888-2.448 0-3.942-1.332-3.942-3.906m8.973-5.292h1.674l2.466 6.912 2.574-6.912H98.9v.522L95.66 18h-1.962l-3.15-8.316zm9.804 2.898v-.144c0-1.962 1.512-3.096 3.744-3.096 2.088 0 3.78 1.008 3.78 3.888V18h-1.188l-.306-.756c-.846.666-2.232 1.044-3.312 1.044-2.07 0-3.006-1.35-3.006-2.898 0-2.124 1.728-2.718 3.492-2.718 1.134 0 1.944.036 2.574.054v-.18c0-1.62-.864-2.178-2.088-2.178-1.17 0-1.998.54-1.998 1.584v.108zm3.132 4.734c.9 0 1.836-.324 2.646-.81V13.95a70 70 0 0 0-2.034-.036c-1.62 0-2.304.27-2.304 1.368 0 .99.54 1.512 1.692 1.512m6.028-6.678.882-.954h.342v-1.89l1.026-1.152h.828v3.042h2.34v1.566h-2.34v3.888c0 1.35.414 1.818 1.656 1.818h.72V18h-.756c-2.592 0-3.474-1.206-3.474-3.384v-3.888h-1.224zm8.127-.954h.828V18h-1.854v-7.686zm-1.026-3.852h1.854v2.268h-1.854zm5.875 7.38v1.782c0 1.458.738 2.286 2.106 2.286s2.124-.846 2.124-2.286v-1.8c0-1.494-.756-2.25-2.124-2.25s-2.106.738-2.106 2.268m-1.836 1.764v-1.746c0-2.574 1.494-3.888 3.942-3.888 2.466 0 3.942 1.314 3.942 3.87v1.782c0 2.556-1.476 3.888-3.942 3.888-2.448 0-3.942-1.332-3.942-3.906m10.059-5.292h1.206l.396 1.044c.918-.918 1.89-1.386 3.186-1.386 2.232 0 3.222 1.314 3.222 3.582V18h-1.854v-5.526c0-1.296-.558-2.052-1.908-2.052-.972 0-1.692.378-2.394 1.08V18h-1.854zm10.012 5.976h1.71v.144c0 1.188.612 1.566 2.052 1.566 1.422 0 2.088-.378 2.088-1.314 0-.63-.288-.936-.99-1.098-.756-.18-2.034-.198-2.952-.432-1.188-.306-1.782-.954-1.782-2.322 0-2.16 1.476-2.844 3.654-2.844 2.25 0 3.582.72 3.582 2.988v.18h-1.656v-.162c0-1.242-.72-1.53-1.962-1.53-1.116 0-1.872.234-1.872 1.314 0 .63.252.9.9 1.062.684.162 2.34.306 3.15.504.954.234 1.638.792 1.638 2.268 0 2.052-1.35 2.844-3.744 2.844s-3.816-.774-3.816-3.024z"
               />
             </svg>
-          </div>
+          </a>
 
           <nav aria-label="Primary">
             <ul className="navbar__menu">
@@ -98,11 +181,14 @@ export function Navbar() {
                 const isActive = item.id === active;
                 return (
                   <li key={item.id}>
-                    <button
-                      type="button"
+                    <a
+                      href={`#${item.target}`}
                       className={`navbar__link${isActive ? ' is-active' : ''}`}
                       aria-current={isActive ? 'page' : undefined}
-                      onClick={() => setActive(item.id)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        goTo(item.id, item.target);
+                      }}
                     >
                       {isActive && (
                         <motion.span
@@ -116,7 +202,7 @@ export function Navbar() {
                         />
                       )}
                       <span className="navbar__label">{t(item.labelKey)}</span>
-                    </button>
+                    </a>
                   </li>
                 );
               })}
@@ -157,24 +243,37 @@ export function Navbar() {
       >
         <nav aria-label="Mobile navigation">
           <ul className="navbar__drawer-nav">
-            {MENU.map((item) => (
-              <li key={item.id}>
-                <a
-                  href={`#${item.id}`}
-                  className="navbar__drawer-link"
-                  onClick={() => {
-                    setActive(item.id);
-                    closeMenu();
-                  }}
-                >
-                  {t(item.labelKey)}
-                </a>
-              </li>
-            ))}
+            {MENU.map((item) => {
+              const isActive = item.id === active;
+              return (
+                <li key={item.id}>
+                  <a
+                    href={`#${item.target}`}
+                    className={`navbar__drawer-link${isActive ? ' is-active' : ''}`}
+                    aria-current={isActive ? 'page' : undefined}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      goTo(item.id, item.target);
+                      closeMenu();
+                    }}
+                  >
+                    {t(item.labelKey)}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
-        <a className="navbar__drawer-cta" href="#contact" onClick={closeMenu}>
+        <a
+          className="navbar__drawer-cta"
+          href="#contact"
+          onClick={(e) => {
+            e.preventDefault();
+            goTo('contact', 'contact');
+            closeMenu();
+          }}
+        >
           <span className="navbar__drawer-cta-label">{t('nav.bookCall')}</span>
           <span className="navbar__drawer-cta-icon" aria-hidden="true">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
