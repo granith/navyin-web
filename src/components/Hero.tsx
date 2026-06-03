@@ -4,6 +4,7 @@ import type { ParseKeys } from 'i18next';
 
 import { useSound } from '../sound/SoundProvider';
 import { HeroCell, type CellGraphic } from './HeroCell';
+import { HeroSlider } from './HeroSlider';
 import './Hero.css';
 
 type TKey = ParseKeys;
@@ -215,6 +216,10 @@ export function Hero() {
               />
             ))}
           </div>
+        </div>
+
+        <div className="hero__slider-wrapper">
+          <HeroSlider />
         </div>
       </div>
     </section>

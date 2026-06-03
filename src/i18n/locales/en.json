@@ -18,6 +18,10 @@
       "watch": "Watch\nApplications",
       "phone": "iOS/Android\nApplications",
       "web": "Web-based\nApplications"
+    },
+    "slider": {
+      "prevSlide": "Previous slide",
+      "nextSlide": "Next slide"
     }
   },
   "logos": {
