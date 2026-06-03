@@ -36,7 +36,7 @@ export default function App() {
         <Technologies />
         <Testimonials />
         <Benefits />
-        {/* <Locations /> */}
+        <Locations />
         <Contact />
       </main>
 

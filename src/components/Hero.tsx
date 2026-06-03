@@ -1,48 +1,140 @@
 import { useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ParseKeys } from 'i18next';
+import { animate, stagger } from 'motion';
 
 import { useSound } from '../sound/SoundProvider';
-import { HeroCell, type CellGraphic } from './HeroCell';
+import { HeroCell, type CellGraphic, type AnimatedGraphicDef } from './HeroCell';
+import { EngineSvg } from './EngineSvg';
+import { ApiSvg } from './ApiSvg';
+import { ToggleSvg } from './ToggleSvg';
 import { HeroSlider } from './HeroSlider';
 import './Hero.css';
 
 type TKey = ParseKeys;
 type LabelVariant = 'normal' | 'rotated' | 'center';
 
-/**
- * One bento tile's data. `gridArea` maps onto the named areas in Hero.css.
- * A cell can carry a positioned graphic, a label, or both:
- *   - graphic: intrinsic `width`/`height` in px, anchored by `x`/`y`
- *     (default center/center) with optional `dx`/`dy` px offsets from the
- *     anchored edge.
- *   - label: `normal` (top-left) or `rotated` (right edge, -90°).
- */
 type CellConfig = {
   id: string;
   gridArea: string;
   graphic?: CellGraphic;
+  animatedGraphic?: AnimatedGraphicDef;
   label?: { key: TKey; variant?: LabelVariant };
 };
 
-/**
- * Real per-cell artwork lands under `public/hero/`; until then every graphic
- * points at the shared placeholder. The sizes/anchors below are examples that
- * exercise each capability (edge + center anchors, an offset, a rotated label,
- * and a graphic-only cell) — swap in the real values per asset.
- */
+// ---------------------------------------------------------------------------
+// Per-cell animation definitions
+// ---------------------------------------------------------------------------
+
+const engineAnimation: AnimatedGraphicDef = {
+  width: 334,
+  height: 64,
+  x: 'right',
+  y: 'center',
+  render: (svgRef) => <EngineSvg svgRef={svgRef} />,
+  onEnter: (svg) => {
+    // Phase 1: background box — fade in orange glow overlay
+    const bgGlow = svg.querySelector<SVGElement>('[data-role="bg-glow"]');
+    if (bgGlow) {
+      animate(bgGlow, { opacity: 1 }, { duration: 0.5, ease: 'easeOut' });
+    }
+
+    // Phase 2: ENGINE text lights up
+    const engineText = svg.querySelector<SVGElement>('[data-role="engine-text"]');
+    if (engineText) {
+      animate(engineText, { fill: '#fff' }, { duration: 0.2, delay: 0.15 });
+    }
+
+    // Phase 3: long horizontal line fires right after the text
+    const longLine = svg.querySelector<SVGElement>('[data-role="long-line"]');
+    if (longLine) {
+      animate(longLine, { stroke: '#fff' }, { duration: 0.2, delay: 0.35 });
+    }
+
+    // Phase 4: battery rect (stroke) + indicator (fill)
+    const batteryRect = svg.querySelector<SVGElement>('[data-role="battery-rect"]');
+    const batteryIndicator = svg.querySelector<SVGElement>('[data-role="battery-indicator"]');
+    if (batteryRect) {
+      animate(batteryRect, { stroke: '#fff' }, { duration: 0.25, delay: 0.55 });
+    }
+    if (batteryIndicator) {
+      animate(batteryIndicator, { fill: '#fff' }, { duration: 0.25, delay: 0.55 });
+    }
+
+    // Phase 5: short side lines stagger from dark → white, top to bottom
+    const sideLines = Array.from(svg.querySelectorAll<SVGElement>('line:not([data-role])'));
+    animate(
+      sideLines,
+      { stroke: '#fff' },
+      { delay: stagger(0.04, { startDelay: 0.7 }), duration: 0.15, ease: 'easeOut' },
+    );
+  },
+  // onExit omitted — engine stays lit after first hover
+};
+
+const apiAnimation: AnimatedGraphicDef = {
+  width: 75,
+  height: 61,
+  render: (svgRef) => <ApiSvg svgRef={svgRef} />,
+  onEnter: (svg) => {
+    // Phase 1: label text
+    const text = svg.querySelector<SVGElement>('[data-role="api-text"]');
+    if (text) {
+      animate(text, { fill: '#fff' }, { duration: 0.2 });
+    }
+
+    // Phase 2: circles sweep left-to-right; top-to-bottom cascade within each column
+    const circles = Array.from(svg.querySelectorAll<SVGElement>('circle'));
+    const columns = new Map<number, SVGElement[]>();
+    for (const c of circles) {
+      const cx = parseFloat(c.getAttribute('cx') ?? '0');
+      if (!columns.has(cx)) columns.set(cx, []);
+      columns.get(cx)!.push(c);
+    }
+    const sortedColumns = [...columns.entries()]
+      .sort(([a], [b]) => a - b)
+      .map(([, els]) =>
+        els.sort(
+          (a, b) =>
+            parseFloat(a.getAttribute('cy') ?? '0') - parseFloat(b.getAttribute('cy') ?? '0'),
+        ),
+      );
+
+    sortedColumns.forEach((col, ci) => {
+      col.forEach((circle, ri) => {
+        animate(
+          circle,
+          { fill: 'rgba(255,255,255,0.25)', stroke: '#fff' },
+          { delay: 0.2 + ci * 0.06 + ri * 0.02, duration: 0.2, ease: 'easeOut' },
+        );
+      });
+    });
+  },
+};
+
+const toggleAnimation: AnimatedGraphicDef = {
+  width: 193,
+  height: 147,
+  render: (svgRef) => <ToggleSvg svgRef={svgRef} />,
+  onEnter: (svg) => {
+    const lines = Array.from(svg.querySelectorAll<SVGElement>('line')).sort(
+      (a, b) => parseFloat(a.getAttribute('x1') ?? '0') - parseFloat(b.getAttribute('x1') ?? '0'),
+    );
+    animate(
+      lines,
+      { stroke: '#fff' },
+      { delay: stagger(0.02), duration: 0.15, ease: 'easeOut' },
+    );
+  },
+};
+
+// ---------------------------------------------------------------------------
+
 const CELLS: readonly CellConfig[] = [
   {
     id: 'engine',
     gridArea: 'engine',
-    graphic: {
-      width: 334,
-      height: 64,
-      x: 'right',
-      y: 'center',
-      src: '/hero/engine.svg',
-      srcLit: '/hero/engine-lit.svg',
-    },
+    animatedGraphic: engineAnimation,
   },
   {
     id: 'global',
@@ -58,12 +150,7 @@ const CELLS: readonly CellConfig[] = [
   {
     id: 'api',
     gridArea: 'api',
-    graphic: {
-      width: 75,
-      height: 61,
-      src: '/hero/api.svg',
-      srcLit: '/hero/api-lit.svg',
-    },
+    animatedGraphic: apiAnimation,
   },
   {
     id: 'ai',
@@ -79,12 +166,7 @@ const CELLS: readonly CellConfig[] = [
   {
     id: 'toggle',
     gridArea: 'toggle',
-    graphic: {
-      width: 196,
-      height: 148,
-      src: '/hero/toggle.svg',
-      srcLit: '/hero/toggle-lit.svg',
-    },
+    animatedGraphic: toggleAnimation,
   },
   {
     id: 'watch',
@@ -197,24 +279,25 @@ export function Hero() {
             role="group"
             aria-label={t('hero.grid.ariaLabel')}
           >
-            {CELLS.map((cell) => (
-              <HeroCell
-                key={cell.id}
-                gridArea={cell.gridArea}
-                graphic={
-                  cell.graphic && {
-                    ...cell.graphic,
+            {CELLS.map((cell) => {
+              const graphicProps = cell.animatedGraphic
+                ? { animatedGraphic: cell.animatedGraphic }
+                : { graphic: cell.graphic };
+              return (
+                <HeroCell
+                  key={cell.id}
+                  gridArea={cell.gridArea}
+                  {...graphicProps}
+                  label={
+                    cell.label && {
+                      text: t(cell.label.key),
+                      variant: cell.label.variant,
+                    }
                   }
-                }
-                label={
-                  cell.label && {
-                    text: t(cell.label.key),
-                    variant: cell.label.variant,
-                  }
-                }
-                onHover={playCell}
-              />
-            ))}
+                  onHover={playCell}
+                />
+              );
+            })}
           </div>
         </div>
 

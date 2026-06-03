@@ -24,7 +24,8 @@
 .hero-cell__img--lit {
   opacity: 0;
 
-  .hero-cell:hover & {
+  .hero-cell:hover &,
+  .hero-cell.is-lit & {
     opacity: 1;
   }
 }
@@ -36,7 +37,8 @@
   pointer-events: none;
   transition: color 0.2s var(--ease);
 
-  .hero-cell:hover & {
+  .hero-cell:hover &,
+  .hero-cell.is-lit & {
     color: var(--text);
   }
 }

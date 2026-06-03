@@ -36,7 +36,7 @@ const SLIDES: readonly Slide[] = [
 ];
 
 /** Delay before lighting up the first slide after the slider scrolls into view. */
-const INITIAL_LIT_DELAY = 1500;
+const INITIAL_LIT_DELAY = 1000;
 
 /**
  * Delay after navigation before lighting up the incoming slide.

@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import { useCallback, useRef, type CSSProperties, type Ref } from 'react';
 
 import './HeroCell.css';
 
@@ -6,53 +6,65 @@ export type CellAnchorX = 'left' | 'center' | 'right';
 export type CellAnchorY = 'top' | 'center' | 'bottom';
 
 export type CellGraphic = {
-  /** Base (dim) graphic. */
   src: string;
-  /** "Lit" graphic, cross-faded over the base on hover. */
   srcLit: string;
-  /** Intrinsic render size in px. */
   width: number;
   height: number;
-  /** Anchor within the cell (default: center / center). */
   x?: CellAnchorX;
   y?: CellAnchorY;
-  /** Offset in px from the anchored edge(s). */
   dx?: number;
   dy?: number;
 };
 
+/**
+ * An inline-SVG graphic with per-cell animation hooks.
+ *
+ * `render(svgRef)` — render the SVG element, forwarding svgRef onto <svg>.
+ * `onEnter(svg)`  — called on mouse-enter. Fires only once when exitEnabled
+ *                   is omitted/false (the default); fires every hover when
+ *                   exitEnabled is true.
+ * `onExit(svg)`   — called on mouse-leave. Only runs when exitEnabled is true.
+ * `exitEnabled`   — opt-in: set to true to allow the animation to reverse on
+ *                   mouse-leave. Defaults to false (retain final state).
+ */
+export type AnimatedGraphicDef = {
+  width: number;
+  height: number;
+  x?: CellAnchorX;
+  y?: CellAnchorY;
+  dx?: number;
+  dy?: number;
+  render: (svgRef: Ref<SVGSVGElement>) => React.ReactNode;
+  onEnter: (svg: SVGSVGElement) => void;
+  onExit?: (svg: SVGSVGElement) => void;
+  exitEnabled?: boolean;
+};
+
 export type CellLabel = {
-  /** Already-localized text (resolved by the parent). */
   text: string;
-  /**
-   * `normal` = top-left; `rotated` = right edge, -90°; `center` = centered
-   * (same size as `rotated`, not rotated). Default `normal`.
-   */
   variant?: 'normal' | 'rotated' | 'center';
 };
 
 type HeroCellProps = {
-  /** Named grid area this cell occupies (see Hero.css grid-template-areas). */
   gridArea: string;
-  graphic?: CellGraphic;
   label?: CellLabel;
-  /** Fires on mouse-enter so the parent can play the (throttled) hover SFX. */
   onHover: () => void;
-};
+} & (
+  | { graphic: CellGraphic; animatedGraphic?: never }
+  | { graphic?: never; animatedGraphic: AnimatedGraphicDef }
+  | { graphic?: never; animatedGraphic?: never }
+);
 
-/**
- * Resolve a graphic's anchor + offset into absolute-position styles. Edge
- * anchors map straight to the matching inset; `center` uses a 50% inset with a
- * translate that folds in the offset, so every anchor/offset combo composes.
- */
+type SizeAndAnchor = Pick<CellGraphic, 'width' | 'height' | 'x' | 'y' | 'dx' | 'dy'>;
+
 function graphicStyle({
   width,
   height,
   x = 'center',
   y = 'center',
   dx = 0,
-  dy = 0
-}: CellGraphic): CSSProperties {
+  dy = 0,
+}: SizeAndAnchor): CSSProperties {
   const style: CSSProperties = { width, height };
   const transforms: string[] = [];
 
@@ -74,34 +86,53 @@ function graphicStyle({
   return style;
 }
 
-/**
- * One tile of the hero bento — a hover-only showcase (no click action). It
- * composes from two optional slots: a positioned, fixed-size graphic that
- * cross-fades to its lit version on hover, and a label. Graphics are
- * decorative (`alt=""`); the label carries the meaning for assistive tech.
- */
-export function HeroCell({ gridArea, graphic, label, onHover }: HeroCellProps) {
+export function HeroCell({ gridArea, graphic, animatedGraphic, label, onHover }: HeroCellProps) {
+  const cellRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const hasEntered = useRef(false);
+
+  const handleMouseEnter = useCallback(() => {
+    // Skip the sound if the cell is already in its final lit state.
+    if (!cellRef.current?.classList.contains('is-lit')) onHover();
+    // Permanently mark the cell as lit (drives CSS for image-based cells).
+    cellRef.current?.classList.add('is-lit');
+
+    if (!animatedGraphic || !svgRef.current) return;
+    // With exit disabled (default), onEnter fires once and stays.
+    if (animatedGraphic.exitEnabled !== true && hasEntered.current) return;
+    animatedGraphic.onEnter(svgRef.current);
+    hasEntered.current = true;
+  }, [onHover, animatedGraphic]);
+
+  const handleMouseLeave = useCallback(() => {
+    // Only call onExit when explicitly opted in.
+    if (!animatedGraphic?.exitEnabled || !svgRef.current) return;
+    animatedGraphic.onExit?.(svgRef.current);
+  }, [animatedGraphic]);
+
   return (
-    <div className="hero-cell" style={{ gridArea }} onMouseEnter={onHover}>
+    <div
+      ref={cellRef}
+      className="hero-cell"
+      style={{ gridArea }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       {graphic && (
         <div className="hero-cell__graphic" style={graphicStyle(graphic)}>
-          <img
-            className="hero-cell__img hero-cell__img--base"
-            src={graphic.src}
-            alt=""
-          />
-          <img
-            className="hero-cell__img hero-cell__img--lit"
-            src={graphic.srcLit}
-            alt=""
-          />
+          <img className="hero-cell__img hero-cell__img--base" src={graphic.src} alt="" />
+          <img className="hero-cell__img hero-cell__img--lit" src={graphic.srcLit} alt="" />
+        </div>
+      )}
+
+      {animatedGraphic && (
+        <div className="hero-cell__graphic" style={graphicStyle(animatedGraphic)}>
+          {animatedGraphic.render(svgRef)}
         </div>
       )}
 
       {label && (
-        <span
-          className={`hero-cell__label hero-cell__label--${label.variant ?? 'normal'}`}
-        >
+        <span className={`hero-cell__label hero-cell__label--${label.variant ?? 'normal'}`}>
           {label.text}
         </span>
       )}
