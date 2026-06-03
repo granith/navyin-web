@@ -102,6 +102,13 @@
   pointer-events: none;
   box-shadow: 0 0 0 0 var(--orange);
   animation: locations-ping 2s var(--ease) infinite;
+
+  /* No pulse with reduced motion — leave a faint static ring as the marker. */
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    box-shadow: 0 0 0 3px var(--orange);
+    opacity: 0.35;
+  }
 }
 
 @keyframes locations-ping {
@@ -112,15 +119,6 @@
   100% {
     box-shadow: 0 0 0 18px var(--orange);
     opacity: 0;
-  }
-}
-
-/* No pulse with reduced motion — leave a faint static ring as the marker. */
-@media (prefers-reduced-motion: reduce) {
-  .locations__ping {
-    animation: none;
-    box-shadow: 0 0 0 3px var(--orange);
-    opacity: 0.35;
   }
 }
 

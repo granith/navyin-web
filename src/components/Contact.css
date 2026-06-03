@@ -34,10 +34,8 @@
   display: none;
   position: relative;
   margin-bottom: 40px;
-}
 
-@media (min-width: 768px) {
-  .contact__options {
+  @media (min-width: 768px) {
     display: block;
   }
 }
