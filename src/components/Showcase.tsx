@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { ParseKeys } from 'i18next';
 
 import { useSound } from '../sound/SoundProvider';
+import { scrollToService } from '../lib/scroll';
 import './Showcase.css';
 
 /**
@@ -98,6 +99,7 @@ export function Showcase() {
               className={`showcase__card showcase__card--${item.align}`}
               onMouseEnter={playAppear}
               onFocus={playAppear}
+              onClick={() => scrollToService(item.id)}
             >
               <span className="showcase__media">
                 <img
