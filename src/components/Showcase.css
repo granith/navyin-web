@@ -1,5 +1,6 @@
 .showcase {
   width: 100%;
+  padding-bottom: 80px;
 }
 
 .showcase__list {
@@ -152,4 +153,72 @@
 .showcase__card:hover .showcase__label,
 .showcase__card:focus-visible .showcase__label {
   opacity: 1;
+}
+
+@media (max-width: 767px) {
+  .showcase__list {
+    display: flex;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 16px;
+    max-width: 100%;
+    padding: 0;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+
+  .showcase__item {
+    flex: 0 0 82.5%;
+    scroll-snap-align: start;
+    aspect-ratio: 3 / 4;
+  }
+
+  /* Keep the media filling the item — no expansion on mobile. */
+  .showcase__media {
+    width: 100%;
+  }
+
+  .showcase__card--center .showcase__media {
+    left: 0;
+    transform: none;
+  }
+
+  /* Disable hover-driven states so only is-active controls the visuals. */
+  .showcase__card:hover .showcase__media,
+  .showcase__card:focus-visible .showcase__media {
+    width: 100%;
+  }
+
+  .showcase__card:hover .showcase__img,
+  .showcase__card:focus-visible .showcase__img {
+    filter: grayscale(1);
+  }
+
+  .showcase__card:hover .showcase__label,
+  .showcase__card:focus-visible .showcase__label {
+    opacity: 0;
+  }
+
+  /* Active slide: full colour + label visible. */
+  .showcase__item.is-active .showcase__img {
+    filter: grayscale(0);
+  }
+
+  .showcase__item.is-active .showcase__label {
+    opacity: 1;
+  }
+
+  .showcase__label {
+    font-size: 16px;
+    bottom: 24px;
+  }
 }

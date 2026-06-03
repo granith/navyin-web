@@ -8,12 +8,23 @@
   --green: #00ce93;
   --orange: #ff5702;
 
+  --nav-offset: 34px;
+  --dock-offset: 92px;
+
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   --font-system:
     -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
     system-ui, 'Segoe UI', Roboto, sans-serif;
   --font: 'Satoshi', var(--font-system);
+
+  @media (max-width: 767px) {
+    --nav-offset: 64px;
+  }
+
+  @media (max-width: 640px) {
+    --dock-offset: 0px;
+  }
 }
 
 *,

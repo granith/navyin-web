@@ -60,6 +60,10 @@
   @media (prefers-reduced-motion: reduce) {
     height: auto;
   }
+
+  @media (max-width: 767px) {
+    padding: 32px 16px 0;
+  }
 }
 
 .services__bar {
@@ -119,6 +123,10 @@
   @media (prefers-reduced-motion: reduce) {
     transform: none !important;
   }
+
+  @media (max-width: 767px) {
+    padding: 24px;
+  }
 }
 
 .services__item {
@@ -155,6 +163,10 @@
   font-size: 32px;
   font-weight: 400;
   line-height: 100%;
+
+  @media (max-width: 767px) {
+    font-size: 24px;
+  }
 }
 
 .services__icon {
@@ -189,6 +201,10 @@
   margin-top: 32px;
   margin-bottom: 8px;
   line-height: 100%;
+
+  @media (max-width: 767px) {
+    font-size: 24px;
+  }
 }
 
 .services__how-desc {

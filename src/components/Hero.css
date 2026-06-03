@@ -17,6 +17,10 @@
     grid-template-columns: 1fr;
     gap: 40px;
   }
+
+  @media (max-width: 767px) {
+    padding: 64px 24px;
+  }
 }
 
 .hero__content {
@@ -92,6 +96,9 @@
 
 .hero__grid-wrapper {
   position: relative;
+  overflow-x: auto;
+  max-width: 804px;
+  margin-inline: auto;
 
   &::after {
     content: '';
@@ -133,10 +140,4 @@
   border-radius: 8px;
   overflow: hidden;
 
-  @media (max-width: 1200px) {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: none;
-    grid-template-areas: none;
-    grid-auto-rows: minmax(140px, auto);
-  }
 }
