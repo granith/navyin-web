@@ -14,6 +14,7 @@ import { Locations } from './components/Locations';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { ScrollHint } from './components/ScrollHint';
+import { GlassCursor } from './components/GlassCursor';
 import { useScrollReveal } from './hooks/useScrollReveal';
 
 export default function App() {
@@ -54,6 +55,7 @@ export default function App() {
       <Footer />
 
       <ScrollHint />
+      <GlassCursor />
     </div>
   );
 }
